@@ -1,0 +1,24 @@
+{
+  "mode": "development",
+  "development": {
+    "dialect": "sqlite",
+    "storage": "./userdata.sqlite",
+    "logging": true
+  },
+  "test": {
+    "dialect": "sqlite",
+    "storage": ":memory:"
+  },
+  "production": {
+    "dialect": "mssql",
+    "host": "hidden",
+    "port": 1433,
+    "dialectOptions": {
+      "encrypt": true
+    },
+    "database": "hidden",
+    "username": "hidden",
+    "password": "hidden",
+    "logging": false
+  }
+}

@@ -4,6 +4,7 @@ const config  = require('./config');
 const db      = require('./db');
 const utils   = require('./utils');
 const process = require('process');
+const bcrypt = require('bcrypt');
 
 /** Validate object to attach all functions to  */
 const validate = Object.create(null);
@@ -34,7 +35,11 @@ validate.logAndThrow = (msg) => {
  */
 validate.user = (user, password) => {
   validate.userExists(user);
-  if (user.password !== password) {
+  // if (user.password !== password) {
+  //   validate.logAndThrow('User password does not match');
+  // }
+  const hashedPassword = bcrypt.hashSync(password, user.salt);
+  if (user.password !== hashedPassword) {
     validate.logAndThrow('User password does not match');
   }
   return user;
