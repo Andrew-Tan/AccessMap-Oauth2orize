@@ -62,6 +62,9 @@ app.post('/oauth/token',               oauth2.token);
 app.get('/api/userinfo',   user.info);
 app.get('/api/clientinfo', client.info);
 
+app.get('/register', user.registerForm);
+app.post('/register', user.registerUser);
+
 // Mimicking google's token info endpoint from
 // https://developers.google.com/accounts/docs/OAuth2UserAgent#validatetoken
 app.get('/api/tokeninfo', token.info);
@@ -102,10 +105,10 @@ setInterval(() => {
 // openssl genrsa -out privatekey.pem 2048
 // openssl req -new -key privatekey.pem -out certrequest.csr
 // openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
-const options = {
-  key  : fs.readFileSync(path.join(__dirname, 'certs/privatekey.pem')),
-  cert : fs.readFileSync(path.join(__dirname, 'certs/certificate.pem')),
-};
+// const options = {
+//   key  : fs.readFileSync(path.join(__dirname, 'certs/privatekey.pem')),
+//   cert : fs.readFileSync(path.join(__dirname, 'certs/certificate.pem')),
+// };
 
 // Create our HTTPS server listening on port 3000.
 // https.createServer(options, app).listen(3000);

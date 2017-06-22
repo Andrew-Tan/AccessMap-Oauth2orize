@@ -1,6 +1,7 @@
 'use strict';
 
 const passport = require('passport');
+const db = require('./db');
 
 /**
  * Simple informational end point, if you want to get information
@@ -29,3 +30,24 @@ exports.info = [
     res.json({ user_id: req.user.id, name: req.user.name, email: req.user.email, scope: req.authInfo.scope });
   },
 ];
+
+exports.registerUser = (request, response) => {
+  db.users.createUser({
+    username: request.body.username,
+    password: request.body.password,
+    name: request.body.name,
+    email: request.body.email,
+  }, (error, result) => {
+    if (error) {
+      response.status(500)
+      response.json({status: 'failed', reason: 'error creating user'})
+      return;
+    }
+    response.redirect('/login');
+  });
+};
+
+
+module.exports.registerForm = (request, response) => {
+  response.render('register');
+};
