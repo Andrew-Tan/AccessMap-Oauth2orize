@@ -114,3 +114,4 @@ setInterval(() => {
 // https.createServer(options, app).listen(3000);
 // console.log('OAuth 2.0 Authorization Server started on port 3000');
 app.listen(3000);
+console.log('OAuth 2.0 Authorization Server started on port 3000');

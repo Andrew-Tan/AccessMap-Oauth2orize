@@ -1,13 +1,13 @@
 "use strict";
 
-const Sequelize = require("sequelize");
-const path = require("path");
-const config_file = require(path.join(__dirname, 'database.json'));
-const env = config_file["mode"];
-const config = require(path.join(__dirname, 'database.json'))[env];
-const fs = require("fs");
+const Sequelize = require('sequelize');
+const path = require('path');
+const config = require('../../../config').database;
+const env = config.mode;
+const preset = config[env];
+const fs = require('fs');
 
-let sequelize = new Sequelize(config.database, config.username, config.password, config);
+const sequelize = new Sequelize(preset.database, preset.username, preset.password, preset);
 
 var db = {};
 

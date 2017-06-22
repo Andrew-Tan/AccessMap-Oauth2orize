@@ -62,3 +62,28 @@ exports.session = {
   // TODO: You need to change this secret to something that you choose for your secret
   secret : 'A Secret That Should Be Changed',
 };
+
+exports.database = {
+  mode: 'development',
+  development: {
+    dialect: 'sqlite',
+    storage: './userdata.sqlite',
+    logging: true
+  },
+  test: {
+    dialect: 'sqlite',
+    storage: ':memory:'
+  },
+  production: {
+    dialect: 'mssql',
+    host: 'hidden',
+    port: 1433,
+    dialectOptions: {
+      encrypt: true
+    },
+    database: 'hidden',
+    username: 'hidden',
+    password: 'hidden',
+    logging: false
+  }
+}
