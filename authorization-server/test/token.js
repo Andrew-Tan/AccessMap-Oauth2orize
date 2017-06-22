@@ -5,8 +5,8 @@ require('process').env.OAUTHRECIPES_SURPRESS_TRACE = true;
 const chai                            = require('chai');
 const sinonChai                       = require('sinon-chai');
 const { accessTokens, refreshTokens } = require('../db');
-const utils                           = require('../utils');
-const token                           = require('../token');
+const utils                           = require('../routes/utils');
+const token                           = require('../routes/token');
 
 chai.use(sinonChai);
 const expect = chai.expect;

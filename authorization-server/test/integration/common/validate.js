@@ -2,7 +2,7 @@
 
 const chai      = require('chai');
 const sinonChai = require('sinon-chai');
-const utils     = require('../../../utils');
+const utils     = require('../../../routes/utils');
 
 chai.use(sinonChai);
 const expect = chai.expect;

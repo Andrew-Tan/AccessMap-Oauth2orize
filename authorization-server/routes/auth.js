@@ -1,6 +1,6 @@
 'use strict';
 
-const db                                   = require('./db');
+const db                                   = require('../db/index');
 const passport                             = require('passport');
 const { Strategy: LocalStrategy }          = require('passport-local');
 const { BasicStrategy }                    = require('passport-http');

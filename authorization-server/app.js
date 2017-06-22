@@ -1,7 +1,7 @@
 'use strict';
 
 const bodyParser     = require('body-parser');
-const client         = require('./client');
+const client         = require('./routes/client');
 const cookieParser   = require('cookie-parser');
 const config         = require('./config');
 const db             = require('./db');
@@ -9,12 +9,12 @@ const express        = require('express');
 const expressSession = require('express-session');
 const fs             = require('fs');
 const https          = require('https');
-const oauth2         = require('./oauth2');
+const oauth2         = require('./routes/oauth2');
 const passport       = require('passport');
 const path           = require('path');
-const site           = require('./site');
-const token          = require('./token');
-const user           = require('./user');
+const site           = require('./routes/site');
+const token          = require('./routes/token');
+const user           = require('./routes/user');
 
 // console.log('Using MemoryStore for the data store');
 // console.log('Using MemoryStore for the Session');
@@ -47,7 +47,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Passport configuration
-require('./auth');
+require('./routes/auth');
 
 app.get('/',        site.index);
 app.get('/login',   site.loginForm);
@@ -97,8 +97,9 @@ app.use((err, req, res, next) => {
 // From time to time we need to clean up any expired tokens
 // in the database
 setInterval(() => {
+  // remove expired access token
   db.accessTokens.removeExpired()
-  .catch(err => console.error('Error trying to remove expired tokens:', err.stack));
+  .catch(err => console.error('Error trying to remove expired access tokens:', err.stack));
 }, config.db.timeToCheckExpiredTokens * 1000);
 
 // TODO: Change these for your own certificates.  This was generated through the commands:

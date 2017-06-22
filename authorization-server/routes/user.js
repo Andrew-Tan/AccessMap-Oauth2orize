@@ -1,7 +1,7 @@
 'use strict';
 
 const passport = require('passport');
-const db = require('./db');
+const db = require('../db/index');
 
 /**
  * Simple informational end point, if you want to get information
@@ -48,6 +48,7 @@ exports.registerUser = (request, response) => {
 };
 
 
-module.exports.registerForm = (request, response) => {
+exports.registerForm = (request, response) => {
   response.render('register');
 };
+

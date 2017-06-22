@@ -4,8 +4,8 @@ require('process').env.OAUTHRECIPES_SURPRESS_TRACE = true;
 
 const chai      = require('chai');
 const sinonChai = require('sinon-chai');
-const utils     = require('../utils');
-const validate  = require('../validate');
+const utils     = require('../routes/utils');
+const validate  = require('../routes/validate');
 
 chai.use(sinonChai);
 const expect = chai.expect;

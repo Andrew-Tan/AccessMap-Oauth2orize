@@ -1,7 +1,7 @@
 'use strict';
 
-const config  = require('./config');
-const db      = require('./db');
+const config  = require('../config/index');
+const db      = require('../db/index');
 const utils   = require('./utils');
 const process = require('process');
 const bcrypt = require('bcrypt');
