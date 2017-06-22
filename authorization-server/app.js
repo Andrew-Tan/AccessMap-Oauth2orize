@@ -105,13 +105,13 @@ setInterval(() => {
 // openssl genrsa -out privatekey.pem 2048
 // openssl req -new -key privatekey.pem -out certrequest.csr
 // openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
-// const options = {
-//   key  : fs.readFileSync(path.join(__dirname, 'certs/privatekey.pem')),
-//   cert : fs.readFileSync(path.join(__dirname, 'certs/certificate.pem')),
-// };
+const options = {
+  key  : fs.readFileSync(path.join(__dirname, 'certs/privatekey.pem')),
+  cert : fs.readFileSync(path.join(__dirname, 'certs/certificate.pem')),
+};
 
 // Create our HTTPS server listening on port 3000.
-// https.createServer(options, app).listen(3000);
-// console.log('OAuth 2.0 Authorization Server started on port 3000');
-app.listen(3000);
+https.createServer(options, app).listen(3000);
 console.log('OAuth 2.0 Authorization Server started on port 3000');
+// app.listen(3000);
+// console.log('OAuth 2.0 Authorization Server started on port 3000');
