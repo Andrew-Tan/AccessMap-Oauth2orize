@@ -11,7 +11,7 @@ const passport = require('passport');
  */
 exports.index = (req, res) => {
   if (!req.query.code) {
-    res.render('index');
+    res.render('index', { user: req.user });
   } else {
     res.render('index-with-code');
   }

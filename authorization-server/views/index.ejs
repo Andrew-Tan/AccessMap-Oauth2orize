@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>OAuth2OrizeRecipes</title>
+  <title>AccessMap OAuth2Orize</title>
   <!-- Needed for mobile sites to work -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -138,12 +138,17 @@
 
 <!-- Main code screen with no URL fragments -->
 <div id="main" style="display: none;">
-  <h1>OAuth2orizeRecipes Server</h1>
+  <h1>AccessMap OAuth2orize Server</h1>
 
   <p>
     <!-- Welcome message -->
-    Welcome to OAuth 2.0. Try one of the grant types below. For more information, see the
-    <a href="https://github.com/FrankHassanabad/Oauth2orizeRecipes/wiki">wiki site</a>.<br/>
+    <% if (!user) { %>
+    Welcome to AccessMap OAuth 2.0.<br/>
+    Please <a href="/login">log in</a> or <a href="/register">register</a>.
+    <% } else { %>
+    Hello, <%= user.name %>. View your <a href="/account">profile</a>.
+    <% } %>
+  <br/>
 
     <!-- Authorization Code grant -->
 

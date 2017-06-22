@@ -39,7 +39,7 @@ app.use(expressSession({
   }),
   key: 'authorization.sid',
   cookie: config.session.cookie,
-}))
+}));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
