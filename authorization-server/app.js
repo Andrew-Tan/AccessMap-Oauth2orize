@@ -16,9 +16,13 @@ const site           = require('./site');
 const token          = require('./token');
 const user           = require('./user');
 
-console.log('Using MemoryStore for the data store');
-console.log('Using MemoryStore for the Session');
-const MemoryStore = expressSession.MemoryStore;
+// console.log('Using MemoryStore for the data store');
+// console.log('Using MemoryStore for the Session');
+// const MemoryStore = expressSession.MemoryStore;
+
+// initalize sequelize with session store
+const SequelizeStore = require('connect-session-sequelize')(expressSession.Store);
+const models = require('./db').models;
 
 // Express configuration
 const app = express();
@@ -27,13 +31,15 @@ app.use(cookieParser());
 
 // Session Configuration
 app.use(expressSession({
-  saveUninitialized : true,
-  resave            : true,
-  secret            : config.session.secret,
-  store             : new MemoryStore(),
-  key               : 'authorization.sid',
-  cookie            : { maxAge: config.session.maxAge },
-}));
+  saveUninitialized: true,
+  resave: true,
+  secret: config.session.secret,
+  store: new SequelizeStore({
+    db: models.sequelize,
+  }),
+  key: 'authorization.sid',
+  cookie: config.session.cookie,
+}))
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
