@@ -1,7 +1,11 @@
 OAuth2orizeRecipes
 ==================
 
-AccessMap OAuth2 authorization server based on [OAuth2orizeRecipes](https://github.com/jaredhanson/oauth2orize).
+AccessMap OAuth2 authorization server based on [OAuth2orizeRecipes](https://github.com/FrankHassanabad/Oauth2orizeRecipes).
+
+<p align="center">
+  <img src="readme-media/images/login-in-screen.png?raw=true" alt="Sign In"/>
+</p>
 
 # Features of the Authorization Server
 * All 4 grant types exposed out of the box
@@ -18,17 +22,18 @@ AccessMap OAuth2 authorization server based on [OAuth2orizeRecipes](https://gith
 * Unit and Integration tests of the majority of code and OAuth2 flows
 * More complex UI Examples for the Sign In/Login and the Decision Screens
 
-# Installation
+# Folders
 
-Please refer to the inner documentation within authorization-server
-```
-git clone https://github.com/FrankHassanabad/Oauth2orizeRecipes.git
-cd Oauth2orizeRecipes/authorization-server
-npm install
-npm start
-```
+### authorization-server
+The main authorization server app. Please refer to inner README for more information
 
+### resource-server
+Example of resource server. Illustration purpose. Please refer to inner README for more information
 
+### web-client
+Example of web client app. Illustration purpose. Please refer to inner README for more information
+
+# Resources
 Go here for how to use the REST API  
 https://github.com/FrankHassanabad/Oauth2orizeRecipes/wiki/OAuth2orize-Authorization-Server-Tests
 

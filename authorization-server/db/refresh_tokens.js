@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 // (http://tools.ietf.org/html/rfc6750)
 
 /**
- * Tokens in-memory data structure which stores all of the refresh tokens
+ * Tokens sequelize data structure which stores all of the refresh tokens
  */
 const models = require('./models');
 

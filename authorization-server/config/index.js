@@ -63,6 +63,14 @@ exports.session = {
   secret : 'A Secret That Should Be Changed',
 };
 
+/**
+ * Database configuration
+ *
+ * mode - presets to use when loading database, must be one of the presets defined
+ * development - development preset
+ * test - test preset
+ * production - production preset
+ */
 exports.database = {
   mode: 'development',
   development: {

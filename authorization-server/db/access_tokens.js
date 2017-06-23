@@ -1,7 +1,6 @@
 'use strict';
 
 const jwt = require('jsonwebtoken');
-var dateFormat = require('dateformat');
 
 // The access tokens.
 // You will use these to access your end point data through the means outlined
@@ -46,7 +45,7 @@ exports.save = async (token, expirationDate, userID, clientID, scope) => {
   const id = jwt.decode(token).jti;
   const newEntry = {
     token: id,
-    expirationDate: dateFormat(expirationDate, 'yyyy-mm-dd h:MM:ss'),
+    expirationDate: expirationDate,
     userID: userID,
     clientID: clientID,
     scope: scope
@@ -96,10 +95,9 @@ exports.delete = async (token) => {
  */
 exports.removeExpired = () => {
   // TODO: is not returning the correct thing.
-  const now = dateFormat(new Date(), 'yyyy-mm-dd h:MM:ss');
   return models.access_tokens.destroy({
     where: {
-      expirationDate: { $lt: now }
+      expirationDate: { $lt: new Date() }
     },
   });
 };
