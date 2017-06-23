@@ -66,7 +66,7 @@ exports.forgot = (request, response) => {
   db.users.findByEmail(request.body.email)
   .then(user => {
     if (!user) {
-      return request.json({ 'err' : 'user associated with the email not found' });
+      return response.json({ 'err' : 'user associated with the email not found' });
     }
     // Create temporary token for user to reset password, valid for half an hour
     const token = utils.createToken({ sub : user.id, exp : 1800 });
@@ -94,7 +94,7 @@ exports.forgot = (request, response) => {
     // });
   })
   .catch((err) => {
-    return request.end(err.toString());
+    return response.end(err.toString());
   });
 };
 
