@@ -65,6 +65,11 @@ app.get('/api/clientinfo', client.info);
 app.get('/register', user.registerForm);
 app.post('/register', user.registerUser);
 
+app.get('/forgot', user.forgotForm);
+app.post('/forgot', user.forgot);
+app.get('/reset/:token', user.resetForm);
+app.post('/reset/:token', user.reset);
+
 // Mimicking google's token info endpoint from
 // https://developers.google.com/accounts/docs/OAuth2UserAgent#validatetoken
 app.get('/api/tokeninfo', token.info);

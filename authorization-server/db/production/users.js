@@ -61,22 +61,19 @@ exports.findByUsername = username => {
       username: username
     }
   });
-    // .then(user => {
-    //   if (user === null) {
-    //     return Promise.resolve(undefined);
-    //   }
-    //   return Promise.resolve({
-    //     id: user.id,
-    //     username: user.username,
-    //     salt: user.salt,
-    //     password: user.password,
-    //     name: user.name,
-    //     email: user.email
-    //   });
-    // })
-    // .catch(error => {
-    //   return Promise.resolve(undefined);
-    // });
+};
+
+/**
+ * Returns a user if it finds one, otherwise returns null if a user is not found.
+ * @param   {String}   email - The unique email to find
+ * @returns {Promise} resolved user if found, otherwise resolves undefined
+ */
+exports.findByEmail = email => {
+  return models.users.findOne({
+    where: {
+      email: email
+    }
+  });
 };
 
 exports.createUser = (usrinfo, done) => {
@@ -95,6 +92,17 @@ exports.createUser = (usrinfo, done) => {
       return done(error, null);
     });
 };
+
+exports.updatePassword = (userid, newpassword) => {
+  const salt = bcrypt.genSaltSync(10);
+  return models.users.update({
+    salt: salt,
+    password: bcrypt.hashSync(newpassword, salt)
+  }, {
+    where: { id: userid },
+    returning: true
+  });
+}
 
 // test users
 models.sequelize.sync().then(async () => {

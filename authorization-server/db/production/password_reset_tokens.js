@@ -23,7 +23,7 @@ const models = require('./models');
 exports.find = (token) => {
   try {
     const id = jwt.decode(token).jti;
-    return models.access_tokens.findOne({
+    return models.password_reset_tokens.findOne({
       where: {
         token: id
       }
@@ -32,25 +32,6 @@ exports.find = (token) => {
     return Promise.resolve(undefined);
   }
 };
-
-// exports.findByUserIdAndClientId = (userId, clientId, done) => {
-//   models.access_tokens.findOne({
-//     where: {
-//       userId: userId,
-//       clientId: clientId,
-//     }
-//   })
-//     .then(access_token => {
-//       if (access_token === null) {
-//         return done(new Error('Token Not Found'))
-//       }
-//       console.log('access token: ', access_token.token)
-//       return done(null, access_token.token);
-//     })
-//     .catch(error => {
-//       return done(error);
-//     });
-// };
 
 /**
  * Saves a access token, expiration date, user id, client id, and scope. Note: The actual full
@@ -75,7 +56,7 @@ exports.save = async (token, expirationDate, userID, clientID, scope) => {
     scope: scope
   };
 
-  await models.access_tokens.create(newEntry);
+  await models.password_reset_tokens.create(newEntry);
   return Promise.resolve(newEntry);
 };
 
@@ -89,7 +70,7 @@ exports.delete = async (token) => {
     const id = jwt.decode(token).jti;
     let deletedEntry;
     await models.sequelize.transaction(t => {
-      return models.access_tokens.findOne({
+      return models.password_reset_tokens.findOne({
         where: {
           token: id
         }
@@ -98,7 +79,7 @@ exports.delete = async (token) => {
           throw new Error();
         }
         deletedEntry = code;
-        return models.access_tokens.destroy({
+        return models.password_reset_tokens.destroy({
           where: {
             token: id
           },
@@ -118,18 +99,8 @@ exports.delete = async (token) => {
  * @returns {Promise} resolved with an associative of tokens that were expired
  */
 exports.removeExpired = () => {
-  // const keys    = Object.keys(tokens);
-  // const expired = keys.reduce((accumulator, key) => {
-  //   if (new Date() > tokens[key].expirationDate) {
-  //     const expiredToken = tokens[key];
-  //     delete tokens[key];
-  //     accumulator[key] = expiredToken; // eslint-disable-line no-param-reassign
-  //   }
-  //   return accumulator;
-  // }, Object.create(null));
-  // return Promise.resolve(expired);
   const now = dateFormat(new Date(), 'yyyy-mm-dd h:MM:ss');
-  return models.access_tokens.destroy({
+  return models.password_reset_tokens.destroy({
     where: {
       expirationDate: { $lt: now }
     },
@@ -145,11 +116,10 @@ exports.removeAll = () => {
   // tokens              = Object.create(null);
   // return Promise.resolve(deletedTokens);
   // TODO: check for correctness
-  return models.access_tokens.destroy({
+  return models.password_reset_tokens.destroy({
     where: {
       token: '*'
     },
-    returning: true,
     truncate: true
   });
 };

@@ -123,6 +123,7 @@ exports.removeAll = () => {
     where: {
       code: '*'
     },
+    returning: true,
     truncate: true
   });
 };

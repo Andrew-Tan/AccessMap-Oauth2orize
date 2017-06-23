@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     email: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      unique: true
     }
   }, {
     freezeTableName: true // Model tableName will be the same as the model name
