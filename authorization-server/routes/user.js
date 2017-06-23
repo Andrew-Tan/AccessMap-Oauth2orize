@@ -3,7 +3,6 @@
 const passport = require('passport');
 const db = require('../db/index');
 const utils = require('./utils');
-// const sendmail = require('sendmail')();
 const nodemailer = require('nodemailer');
 const mg = require('nodemailer-mailgun-transport');
 
