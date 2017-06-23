@@ -13,39 +13,17 @@ const bcrypt = require('bcrypt');
  * name     : The name of your user
  */
 
-// const users = [
-//   { id: '1', username: 'bob', password: 'secret', name: 'Bob Smith', email: 'a@ex.com' },
-//   { id: '2', username: 'joe', password: 'password', name: 'Joe Davis' , email: 'b@ex.com'},
-// ];
-
 /**
  * Returns a user if it finds one, otherwise returns null if a user is not found.
  * @param   {String}   id - The unique id of the user to find
  * @returns {Promise} resolved user if found, otherwise resolves undefined
  */
-// exports.find = id => Promise.resolve(users.find(user => user.id === id));
 exports.find = (id) => {
   return models.users.findOne({
     where: {
       id: id
     }
   });
-    // .then(user => {
-    //   if (user === null) {
-    //     return Promise.resolve(undefined);
-    //   }
-    //   return Promise.resolve({
-    //     id: user.id,
-    //     username: user.username,
-    //     salt: user.salt,
-    //     password: user.password,
-    //     name: user.name,
-    //     email: user.email
-    //   });
-    // })
-    // .catch(error => {
-    //   return Promise.resolve(undefined);
-    // });
 };
 
 /**
@@ -53,8 +31,6 @@ exports.find = (id) => {
  * @param   {String}   username - The unique user name to find
  * @returns {Promise} resolved user if found, otherwise resolves undefined
  */
-// exports.findByUsername = username =>
-//   Promise.resolve(users.find(user => user.username === username));
 exports.findByUsername = username => {
   return models.users.findOne({
     where: {
@@ -76,23 +52,29 @@ exports.findByEmail = email => {
   });
 };
 
-exports.createUser = (usrinfo, done) => {
+/**
+ * Create a new user with the info given
+ * @param   {Object}   usrinfo - the info of the new user
+ * @returns {Promise}
+ */
+exports.createUser = (usrinfo) => {
+  // TODO: define better return value
   const salt = bcrypt.genSaltSync(10);
-  models.users.create({
+  return models.users.create({
     username: usrinfo.username,
     salt: salt,
     password: bcrypt.hashSync(usrinfo.password, salt),
     name: usrinfo.name,
     email: usrinfo.email,
-  })
-    .then(() => {
-      return done(null, null);
-    })
-    .catch(error => {
-      return done(error, null);
-    });
+  });
 };
 
+/**
+ * Update the password of a user
+ * @param   {Number}   userid - the if of a existing user
+ * @param   {String}    newpassword - the new password
+ * @returns {Promise}
+ */
 exports.updatePassword = (userid, newpassword) => {
   const salt = bcrypt.genSaltSync(10);
   return models.users.update({

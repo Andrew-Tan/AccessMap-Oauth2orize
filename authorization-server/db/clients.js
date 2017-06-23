@@ -21,11 +21,6 @@ const models = require('./models');
  * access.
  */
 
-// const clients = [
-//   { id: '1', name: 'Samplr', clientId: 'abc123', clientSecret: 'ssh-secret', isTrusted: false },
-//   { id: '2', name: 'Samplr2', clientId: 'xyz123', clientSecret: 'ssh-password', isTrusted: true },
-// ];
-
 // Testing clients
 async function testClients() {
   await models.clients.create({
@@ -55,7 +50,6 @@ models.sequelize.sync().then(() => { testClients(); });
  * @param   {String}   id   - The unique id of the client to find
  * @returns {Promise}  resolved promise with the client if found, otherwise undefined
  */
-// exports.find = id => Promise.resolve(clients.find(client => client.id === id));
 exports.find = id => {
   return models.clients.findOne({
     where: {
@@ -69,8 +63,6 @@ exports.find = id => {
  * @param   {String}   clientId - The unique client id of the client to find
  * @returns {Promise} resolved promise with the client if found, otherwise undefined
  */
-// exports.findByClientId = clientId =>
-//   Promise.resolve(clients.find(client => client.clientId === clientId));
 exports.findByClientId = (clientId) => {
   return models.clients.findOne({
     where: {

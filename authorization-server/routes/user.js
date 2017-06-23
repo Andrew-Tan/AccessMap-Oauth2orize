@@ -8,12 +8,13 @@ const nodemailer = require('nodemailer');
 const mg = require('nodemailer-mailgun-transport');
 
 // transporter to send Email
+// TODO: move auth config to config
 const auth = {
   auth: {
-    api_key: 'key-e3111074d9716dfa0e597729263dfea1',
-    domain: 'sandbox06b14cc0862a4613a590724cc8f2700c.mailgun.org'
+    api_key: 'secret',
+    domain: 'passcode'
   }
-}
+};
 const transporter = nodemailer.createTransport(mg(auth));
 
 /**
@@ -50,13 +51,13 @@ exports.registerUser = (request, response) => {
     password: request.body.password,
     name: request.body.name,
     email: request.body.email,
-  }, (error, result) => {
-    if (error) {
-      response.status(500)
-      response.json({status: 'failed', reason: 'error creating user'})
-      return;
-    }
+  })
+  .then(() => {
     response.redirect('/login');
+  })
+  .catch(error => {
+    response.status(500);
+    response.json({ status: 'failed', reason: 'error creating user' });
   });
 };
 

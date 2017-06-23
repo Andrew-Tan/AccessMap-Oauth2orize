@@ -10,7 +10,6 @@ const jwt = require('jsonwebtoken');
 /**
  * Authorization codes sequelize data structure which stores all of the authorization codes
  */
-// let codes = Object.create(null);
 const models = require('./models');
 
 /**
@@ -26,18 +25,6 @@ exports.find = (token) => {
         code: id
       }
     });
-    // .then(code => {
-    //   if (code === null) {
-    //     return Promise.resolve(undefined);
-    //   }
-    //   return Promise.resolve({
-    //     clientID: code.clientID,
-    //     redirectURI: code.redirectURI,
-    //     userID: code.userID,
-    //     scope: code.scope
-    //   });
-    // });
-    // return Promise.resolve(codes[id]);
   } catch (error) {
     return Promise.resolve(undefined);
   }
@@ -56,8 +43,6 @@ exports.find = (token) => {
  */
 exports.save = async (code, clientID, redirectURI, userID, scope) => {
   const id = jwt.decode(code).jti;
-  // codes[id] = { clientID, redirectURI, userID, scope };
-  // return Promise.resolve(codes[id]);
   const newEntry = {
     code: id,
     clientID: clientID,
@@ -66,15 +51,8 @@ exports.save = async (code, clientID, redirectURI, userID, scope) => {
     scope: scope
   };
 
-  // TODO: fix logic
   await models.authorization_codes.create(newEntry);
   return Promise.resolve(newEntry);
-  // .then(() => {
-  //   return Promise.resolve(newEntry);
-  // })
-  // .catch(error => {
-  //   return Promise.resolve(undefined);
-  // });
 };
 
 /**
@@ -85,7 +63,7 @@ exports.save = async (code, clientID, redirectURI, userID, scope) => {
 exports.delete = async (token) => {
   try {
     const id = jwt.decode(token).jti;
-    var deletedEntry;
+    var deletedEntry = undefined;
     await models.sequelize.transaction(t => {
       return models.authorization_codes.findOne({
         where: {
@@ -115,10 +93,7 @@ exports.delete = async (token) => {
  * @returns {Promise} resolved with all removed authorization codes returned
  */
 exports.removeAll = () => {
-  // const deletedTokens = codes;
-  // codes               = Object.create(null);
-  // return Promise.resolve(deletedTokens);
-  // TODO: might not return the correct value in promise
+  // TODO: is not returning the correct thing.
   return models.authorization_codes.destroy({
     where: {
       code: '*'

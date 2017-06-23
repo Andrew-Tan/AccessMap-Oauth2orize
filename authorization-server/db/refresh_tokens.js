@@ -10,7 +10,6 @@ const jwt = require('jsonwebtoken');
 /**
  * Tokens in-memory data structure which stores all of the refresh tokens
  */
-// let tokens = Object.create(null);
 const models = require('./models');
 
 /**
@@ -26,17 +25,6 @@ exports.find = (token) => {
         token: id
       }
     });
-    // .then(code => {
-    //   if (code === null) {
-    //     return Promise.resolve(undefined);
-    //   }
-    //   return Promise.resolve({
-    //     clientID: code.clientID,
-    //     userID: code.userID,
-    //     scope: code.scope
-    //   });
-    // });
-    // return Promise.resolve(codes[id]);
   } catch (error) {
     return Promise.resolve(undefined);
   }
@@ -54,8 +42,6 @@ exports.find = (token) => {
  */
 exports.save = async (token, userID, clientID, scope) => {
   const id = jwt.decode(token).jti;
-  // tokens[id] = { userID, clientID, scope };
-  // return Promise.resolve(tokens[id]);
   const newEntry = {
     token: id,
     clientID: clientID,
@@ -65,12 +51,6 @@ exports.save = async (token, userID, clientID, scope) => {
 
   await models.refresh_tokens.create(newEntry);
   return Promise.resolve(newEntry);
-  // .then(() => {
-  //   return Promise.resolve(newEntry);
-  // })
-  // .catch(error => {
-  //   return Promise.resolve(undefined);
-  // });
 };
 
 /**
@@ -81,7 +61,7 @@ exports.save = async (token, userID, clientID, scope) => {
 exports.delete = async (token) => {
   try {
     const id = jwt.decode(token).jti;
-    let deletedEntry;
+    let deletedEntry = undefined;
     await models.sequelize.transaction(t => {
       return models.refresh_tokens.findOne({
         where: {
@@ -111,10 +91,7 @@ exports.delete = async (token) => {
  * @returns {Promise} resolved with all removed tokens returned
  */
 exports.removeAll = () => {
-  // const deletedTokens = tokens;
-  // tokens              = Object.create(null);
-  // return Promise.resolve(deletedTokens);
-  // TODO: check for correctness
+  // TODO: is not returning the correct thing.
   return models.refresh_tokens.destroy({
     where: {
       token: '*'
