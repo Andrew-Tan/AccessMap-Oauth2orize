@@ -3,15 +3,18 @@
 const passport = require('passport');
 const db = require('../db/index');
 const utils = require('./utils');
-const sendmail = require('sendmail')();
-// const nodemailer = require('nodemailer');
+// const sendmail = require('sendmail')();
+const nodemailer = require('nodemailer');
+const mg = require('nodemailer-mailgun-transport');
 
 // transporter to send Email
-// const transporter = nodemailer.createTransport({
-//   sendmail: true,
-//   newline: 'unix',
-//   path: '/usr/sbin/sendmail'
-// });
+const auth = {
+  auth: {
+    api_key: 'key-e3111074d9716dfa0e597729263dfea1',
+    domain: 'sandbox06b14cc0862a4613a590724cc8f2700c.mailgun.org'
+  }
+}
+const transporter = nodemailer.createTransport(mg(auth));
 
 /**
  * Simple informational end point, if you want to get information
@@ -71,27 +74,19 @@ exports.forgot = (request, response) => {
     // Create temporary token for user to reset password, valid for half an hour
     const token = utils.createToken({ sub : user.id, exp : 1800 });
     const mailOptions = {
-      from: 'passwordreset@demo.com',
+      from: 'myemail@example.com',
       to: user.email,
       subject: 'Email Reset',
-      html: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+      text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
       'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
       request.protocol + '://' + request.headers.host + '/reset/' + token + '\n\n' +
+      'The token is only valid for half an hour from its issuance, please use it at your earliest convenience\n' +
       'If you did not request this, please ignore this email and your password will remain unchanged.\n'
     };
-    // sendmail(mailOptions, (err, reply) => {
-    //   console.log('error:', err && err.stack);
-    //   console.dir('reply', reply);
-    // });
-    response.end(mailOptions.html);
-    // transporter.sendMail(mailOptions, (err, info) => {
-    //   console.log(info.envelope);
-    //   console.log(info.messageId);
-    //   if (err) {
-    //     return response.end('Message could not be sent');
-    //   }
-    //   response.end('An email has been sent');
-    // });
+    transporter.sendMail(mailOptions, (err, info) => {
+      console.log(info);
+    });
+    response.end(mailOptions.text);
   })
   .catch((err) => {
     return response.end(err.toString());

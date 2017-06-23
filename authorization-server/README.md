@@ -1,12 +1,26 @@
 Authorization Server
 ==================
 
-This is the authorization server example.
+This is the authorization server.
+
+# Configuration
+Before spinning up the authorization server, a few configuration MUST BE MADE to make it run correctly.
+
+### Certificate
+The certificate that this authorization server will use is placed in cert/. They are used for signing JWT
+and setting up SSL connection. Test certificates are generated for testing purpose, but please regenerate 
+a new one before putting the instance into production.
+```
+openssl genrsa -out privatekey.pem 2048
+openssl req -new -key privatekey.pem -out certrequest.csr
+openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
+```
+
+### Configuration File
+The main configuration file is in config/index.js. Documentations are attached as inline comments.
 
 # Installation
 ```
-git clone https://github.com/FrankHassanabad/Oauth2orizeRecipes.git
-cd Oauth2orizeRecipes/authorization-server
 npm install
 npm start
 ```
