@@ -14,7 +14,7 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER
     },
     scope: {
-      type: DataTypes.STRING
+      type: DataTypes.JSONB
     }
   }, {
     freezeTableName: true, // Model tableName will be the same as the model name
