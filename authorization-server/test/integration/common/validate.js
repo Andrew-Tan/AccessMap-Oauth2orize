@@ -155,7 +155,7 @@ validate.clientJson = (response, body) => {
   expect(response.headers['content-type']).to.eql('application/json; charset=utf-8');
   expect(Object.keys(jsonResponse)).to.have.lengthOf(3);
   expect(jsonResponse).to.eql({
-    client_id : '3',
+    client_id : 3,
     name      : 'Samplr3',
     scope     : '*',
   });

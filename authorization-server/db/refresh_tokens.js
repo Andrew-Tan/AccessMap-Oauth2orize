@@ -17,14 +17,23 @@ const models = require('./models');
  * @param   {String}  token - The token to decode to get the id of the refresh token to find.
  * @returns {Promise} resolved with the token
  */
-exports.find = (token) => {
+exports.find = async (token) => {
   try {
     const id = jwt.decode(token).jti;
-    return models.refresh_tokens.findOne({
+    const result = await models.refresh_tokens.findOne({
       where: {
         token: id
       }
     });
+
+    if (result === null) {
+      return Promise.resolve(undefined);
+    }
+    return Promise.resolve({
+      clientID       : result.clientID,
+      userID         : result.userID,
+      scope          : result.scope,
+    })
   } catch (error) {
     return Promise.resolve(undefined);
   }
@@ -42,15 +51,23 @@ exports.find = (token) => {
  */
 exports.save = async (token, userID, clientID, scope) => {
   const id = jwt.decode(token).jti;
-  const newEntry = {
-    token: id,
-    clientID: clientID,
-    userID: userID,
-    scope: scope
-  };
 
-  await models.refresh_tokens.create(newEntry);
-  return Promise.resolve(newEntry);
+  try {
+    await models.refresh_tokens.create({
+      token: id,
+      userID: userID,
+      clientID: clientID,
+      scope: scope
+    });
+  } catch (error) {
+    return Promise.resolve(undefined);
+  }
+
+  return Promise.resolve({
+    userID: userID,
+    clientID: clientID,
+    scope: scope
+  });
 };
 
 /**
@@ -80,7 +97,11 @@ exports.delete = async (token) => {
         }, {transaction: t});
       });
     });
-    return Promise.resolve(deletedEntry);
+    return Promise.resolve({
+      clientID: deletedEntry.clientID,
+      scope: deletedEntry.scope,
+      userID: deletedEntry.userID
+    });
   } catch (error) {
     return Promise.resolve(undefined);
   }

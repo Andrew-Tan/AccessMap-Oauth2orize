@@ -72,7 +72,7 @@ exports.session = {
  * production - production preset
  */
 exports.database = {
-  mode: 'test',
+  mode: 'development',
   development: {
     dialect: 'sqlite',
     storage: './userdata.sqlite',
@@ -83,7 +83,7 @@ exports.database = {
   test: {
     dialect: 'sqlite',
     storage: ':memory:',
-    logging: false,
+    logging: true,
   },
   production: {
     dialect: 'mssql',

@@ -174,7 +174,7 @@ exports.authorization = [
     // the clients then they will have to re-consent.
     db.clients.findByClientId(req.query.client_id)
     .then((client) => {
-      if (client != null && client.trustedClient && client.trustedClient === true) {
+      if (client !== null && client.trustedClient && client.trustedClient === true) {
         // This is how we short call the decision like the dialog below does
         server.decision({ loadTransaction: false }, (serverReq, callback) => {
           callback(null, { allow: true });

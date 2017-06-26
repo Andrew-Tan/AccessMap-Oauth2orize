@@ -59,6 +59,7 @@ const findQuery = async (where) => {
       name         : result.name,
       clientId     : result.clientId,
       clientSecret : result.clientSecret,
+      trustedClient: result.trustedClient,
     })
   } catch (error) {
     return Promise.resolve(undefined);

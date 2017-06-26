@@ -81,8 +81,10 @@ exports.save = async (code, clientID, redirectURI, userID, scope) => {
  */
 exports.delete = async (token) => {
   try {
+    await models.sequelize.sync();
     const id = jwt.decode(token).jti;
     let deletedEntry = undefined;
+    // TODO: Some sync problems here! the transaction mysteriously stopped & return? But executing again?...
     await models.sequelize.transaction(t => {
       return models.authorization_codes.findOne({
         where: {
