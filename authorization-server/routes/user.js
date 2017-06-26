@@ -5,16 +5,11 @@ const db = require('../db/index');
 const utils = require('./utils');
 const nodemailer = require('nodemailer');
 const mg = require('nodemailer-mailgun-transport');
+const config = require('../config/index')
 
 // transporter to send Email
 // TODO: move auth config to config
-const auth = {
-  auth: {
-    api_key: 'secret',
-    domain: 'passcode'
-  }
-};
-const transporter = nodemailer.createTransport(mg(auth));
+const transporter = nodemailer.createTransport(mg(config.email));
 
 /**
  * Simple informational end point, if you want to get information
@@ -55,8 +50,7 @@ exports.registerUser = (request, response) => {
     response.redirect('/login');
   })
   .catch(error => {
-    response.status(500);
-    response.json({ status: 'failed', reason: 'error creating user' });
+    response.render('info', { message: ['Cannot create user'] })
   });
 };
 
@@ -69,7 +63,9 @@ exports.forgot = (request, response) => {
   db.users.findByEmail(request.body.email)
   .then(user => {
     if (!user) {
-      return response.json({ 'err' : 'user associated with the email not found' });
+      request.flash('info', 'User associated with the Email not found');
+      response.redirect('/forgot');
+      return;
     }
     // Create temporary token for user to reset password, valid for half an hour
     const token = utils.createToken({ sub : user.id, exp : 1800 });
@@ -86,15 +82,16 @@ exports.forgot = (request, response) => {
     transporter.sendMail(mailOptions, (err, info) => {
       console.log(info);
     });
-    response.end(mailOptions.text);
+    request.flash('info', 'An Email has been sent to your inbox, please follow the instruction there.');
+    response.redirect('/forgot');
   })
   .catch((err) => {
-    return response.end(err.toString());
+    return response.render('info', { message: ['Internal Error'] });
   });
 };
 
 exports.forgotForm = (request, response) => {
-  response.render('forgot');
+  response.render('forgot', { message: request.flash('info') });
 };
 
 exports.resetForm = (request, response) => {
@@ -103,7 +100,7 @@ exports.resetForm = (request, response) => {
     utils.verifyToken(token);
     response.render('reset', { resetToken: token });
   } catch (err) {
-    response.end('Incorrect Token');
+    return response.render('info', { message: ['Incorrect Token'] });
   }
 };
 
@@ -115,12 +112,12 @@ exports.reset = (request, response) => {
     const password = request.body.password;
     const confirmed_password = request.body.confirm_password;
     if (password !== confirmed_password) {
-      return response.end('Inconsistent Password');
+      return response.render('info', { message: ['Inconsistent Password'] });
     }
     db.users.updatePassword(userID, password).then(result => {
       response.end('Password updated for userID: ' + userID);
     });
   } catch (err) {
-    return response.end('Incorrect Token');
+    return response.render('info', { message: ['Incorrect Token'] });
   }
 };

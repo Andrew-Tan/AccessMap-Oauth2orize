@@ -16,6 +16,8 @@ const site           = require('./routes/site');
 const token          = require('./routes/token');
 const user           = require('./routes/user');
 
+const flash = require('connect-flash');
+
 // console.log('Using MemoryStore for the data store');
 // console.log('Using MemoryStore for the Session');
 // const MemoryStore = expressSession.MemoryStore;
@@ -28,6 +30,7 @@ const models = require('./db').models;
 const app = express();
 app.set('view engine', 'ejs');
 app.use(cookieParser());
+app.use(flash());
 
 // Session Configuration
 app.use(expressSession({

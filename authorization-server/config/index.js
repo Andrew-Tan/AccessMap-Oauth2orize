@@ -94,4 +94,11 @@ exports.database = {
     password: 'hidden',
     logging: false
   }
-}
+};
+
+exports.email = {
+  auth: {
+    api_key: 'secret',
+    domain: 'passcode'
+  }
+};

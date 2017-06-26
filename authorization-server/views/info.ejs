@@ -7,33 +7,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Style sheets -->
-  <link rel="stylesheet" type="text/css" href="stylesheets/pure-min.css">
-  <link rel="stylesheet" type="text/css" href="stylesheets/base.css">
-  <link rel="stylesheet" type="text/css" href="stylesheets/sign-in-modules.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/pure-min.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/sign-in-modules.css">
 </head>
 <body>
 
 <!-- HTML login screen form -->
-<form action="/forgot" method="post" class="pure-form pure-form-stacked">
+<form action="/" class="pure-form pure-form-stacked">
   <fieldset>
     <!-- Upper box with Title, username, and password -->
     <div class="upper-box">
       <!-- Title -->
       <div>
-        <h1 class="title-padding">Forgot Password</h1>
-      </div>
-      <div class="pure-control-group">
-        <!-- Username label and input -->
-        <label class="labels" for="email">Email:</label>
-
-        <div class="input-fields">
-          <input class="pure-input-1 input-fields" id="email" type="email" name="email"/>
-        </div>
+        <h1 class="title-padding">Information</h1>
       </div>
       <% if (message.length > 0) { %>
       <div class="pure-control-group labels">
         <p>
-        <p style="color:red;"><%= message[0] %></p>
+        <p style="color:red; text-align:center;"><%= message[0] %></p>
         </p>
       </div>
       <% } %>
@@ -41,7 +33,7 @@
     <!-- Bottom box with Sign in -->
     <div class="bottom-box">
       <div class="pure-controls sign-in-button">
-        <button type="submit" value="Submit" class="pure-button pure-button-primary">Reset Password</button>
+        <button type="submit" value="Submit" class="pure-button pure-button-primary">Home</button>
       </div>
     </div>
   </fieldset>
