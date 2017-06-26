@@ -16,10 +16,10 @@ describe('users', () => {
     users.find('1')
     .then((user) => {
       expect(user).to.contain({
-        id       : '1',
+        id       : 1,
         username : 'bob',
-        password : 'secret',
         name     : 'Bob Smith',
+        email    : 'a@ex.com',
       });
     }));
 
@@ -27,10 +27,10 @@ describe('users', () => {
     users.findByUsername('bob')
     .then((user) => {
       expect(user).to.contain({
-        id       : '1',
+        id       : 1,
         username : 'bob',
-        password : 'secret',
         name     : 'Bob Smith',
+        email    : 'a@ex.com',
       });
     }));
 });

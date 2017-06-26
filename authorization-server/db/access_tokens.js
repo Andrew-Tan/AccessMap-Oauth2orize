@@ -17,14 +17,24 @@ const models = require('./models');
  * @param   {String}  token - The token to decode to get the id of the access token to find.
  * @returns {Promise} resolved with the token if found, otherwise resolved with undefined
  */
-exports.find = (token) => {
+exports.find = async (token) => {
   try {
     const id = jwt.decode(token).jti;
-    return models.access_tokens.findOne({
+    const result = await models.access_tokens.findOne({
       where: {
         token: id
       }
     });
+
+    if (result === null) {
+      return Promise.resolve(undefined);
+    }
+    return Promise.resolve({
+      clientID       : result.clientID,
+      expirationDate : new Date(result.expirationDate),
+      userID         : result.userID,
+      scope          : result.scope,
+    })
   } catch (error) {
     return Promise.resolve(undefined);
   }
@@ -43,16 +53,25 @@ exports.find = (token) => {
  */
 exports.save = async (token, expirationDate, userID, clientID, scope) => {
   const id = jwt.decode(token).jti;
-  const newEntry = {
-    token: id,
+
+  try {
+    await models.access_tokens.create({
+      token: id,
+      expirationDate: expirationDate,
+      userID: userID,
+      clientID: clientID,
+      scope: scope
+    });
+  } catch (error) {
+    return Promise.resolve(undefined);
+  }
+
+  return Promise.resolve({
     expirationDate: expirationDate,
     userID: userID,
     clientID: clientID,
     scope: scope
-  };
-
-  await models.access_tokens.create(newEntry);
-  return Promise.resolve(newEntry);
+  });
 };
 
 /**
@@ -82,7 +101,12 @@ exports.delete = async (token) => {
         }, {transaction: t});
       });
     });
-    return Promise.resolve(deletedEntry);
+    return Promise.resolve({
+      clientID: deletedEntry.clientID,
+      expirationDate: new Date(deletedEntry.expirationDate),
+      scope: deletedEntry.scope,
+      userID: deletedEntry.userID
+    });
   } catch (error) {
     return Promise.resolve(undefined);
   }

@@ -17,13 +17,23 @@ const models = require('./models');
  * @param   {String}  token - The token to decode to get the id of the authorization token to find.
  * @returns {Promise} resolved with the authorization code if found, otherwise undefined
  */
-exports.find = (token) => {
+exports.find = async (token) => {
   try {
     const id = jwt.decode(token).jti;
-    return models.authorization_codes.findOne({
+    const result = await models.authorization_codes.findOne({
       where: {
         code: id
       }
+    });
+
+    if (result === null) {
+      return Promise.resolve(undefined);
+    }
+    return Promise.resolve({
+      clientID: result.clientID,
+      redirectURI: result.redirectURI,
+      scope: result.scope,
+      userID: result.userID
     });
   } catch (error) {
     return Promise.resolve(undefined);
@@ -43,16 +53,25 @@ exports.find = (token) => {
  */
 exports.save = async (code, clientID, redirectURI, userID, scope) => {
   const id = jwt.decode(code).jti;
-  const newEntry = {
-    code: id,
+
+  try {
+    await models.authorization_codes.create({
+      code: id,
+      clientID: clientID,
+      redirectURI: redirectURI,
+      userID: userID,
+      scope: scope
+    });
+  } catch (error) {
+    return Promise.resolve(undefined);
+  }
+
+  return Promise.resolve({
     clientID: clientID,
     redirectURI: redirectURI,
     userID: userID,
     scope: scope
-  };
-
-  await models.authorization_codes.create(newEntry);
-  return Promise.resolve(newEntry);
+  });
 };
 
 /**
@@ -63,7 +82,7 @@ exports.save = async (code, clientID, redirectURI, userID, scope) => {
 exports.delete = async (token) => {
   try {
     const id = jwt.decode(token).jti;
-    var deletedEntry = undefined;
+    let deletedEntry = undefined;
     await models.sequelize.transaction(t => {
       return models.authorization_codes.findOne({
         where: {
@@ -82,7 +101,12 @@ exports.delete = async (token) => {
         }, {transaction: t});
       });
     });
-    return Promise.resolve(deletedEntry);
+    return Promise.resolve({
+      clientID: deletedEntry.clientID,
+      redirectURI: deletedEntry.redirectURI,
+      scope: deletedEntry.scope,
+      userID: deletedEntry.userID
+    });
   } catch (error) {
     return Promise.resolve(undefined);
   }

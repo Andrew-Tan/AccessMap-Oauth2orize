@@ -72,28 +72,31 @@ exports.session = {
  * production - production preset
  */
 exports.database = {
-  mode: 'development',
+  mode: 'test',
   development: {
     dialect: 'sqlite',
     storage: './userdata.sqlite',
-    logging: true
+    logging: true,
   },
+  //  NOTE: DO NOT MODIFY preset "test" as it is used for unit tests. Change "mode"
+  // to it during unit testing.
   test: {
     dialect: 'sqlite',
-    storage: ':memory:'
+    storage: ':memory:',
+    logging: false,
   },
   production: {
     dialect: 'mssql',
     host: 'hidden',
     port: 1433,
     dialectOptions: {
-      encrypt: true
+      encrypt: true,
     },
     database: 'hidden',
     username: 'hidden',
     password: 'hidden',
-    logging: false
-  }
+    logging: false,
+  },
 };
 
 exports.email = {

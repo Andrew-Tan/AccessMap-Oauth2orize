@@ -13,17 +13,35 @@ const bcrypt = require('bcrypt');
  * name     : The name of your user
  */
 
+const findQuery = async (where) => {
+  try {
+    const result = await models.users.findOne({
+      where: where
+    });
+
+    if (result === null) {
+      return Promise.resolve(undefined);
+    }
+    return Promise.resolve({
+      id       : result.id,
+      username : result.username,
+      salt     : result.salt,
+      password : result.password,
+      name     : result.name,
+      email    : result.email
+    })
+  } catch (error) {
+    return Promise.resolve(undefined);
+  }
+}
+
 /**
  * Returns a user if it finds one, otherwise returns null if a user is not found.
  * @param   {String}   id - The unique id of the user to find
  * @returns {Promise} resolved user if found, otherwise resolves undefined
  */
 exports.find = (id) => {
-  return models.users.findOne({
-    where: {
-      id: id
-    }
-  });
+  return findQuery({ id: id });
 };
 
 /**
@@ -32,11 +50,7 @@ exports.find = (id) => {
  * @returns {Promise} resolved user if found, otherwise resolves undefined
  */
 exports.findByUsername = username => {
-  return models.users.findOne({
-    where: {
-      username: username
-    }
-  });
+  return findQuery({ username: username });
 };
 
 /**
@@ -45,11 +59,7 @@ exports.findByUsername = username => {
  * @returns {Promise} resolved user if found, otherwise resolves undefined
  */
 exports.findByEmail = email => {
-  return models.users.findOne({
-    where: {
-      email: email
-    }
-  });
+  return findQuery({ email: email });
 };
 
 /**
@@ -90,8 +100,8 @@ exports.updatePassword = (userid, newpassword) => {
 models.sequelize.sync().then(async () => {
   await module.exports.createUser({
     username: 'bob', password: 'secret', name: 'Bob Smith', email: 'a@ex.com'
-  }, () => {});
+  }, () => {}).catch(() => console.error('User created: bob'));
   await module.exports.createUser({
     username: 'joe', password: 'password', name: 'Joe Davis', email: 'b@ex.com'
-  }, () => {});
+  }, () => {}).catch(() => console.error('User created: joe'));
 });

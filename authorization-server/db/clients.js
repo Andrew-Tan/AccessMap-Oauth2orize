@@ -28,34 +28,50 @@ async function testClients() {
     name          : 'Samplr',
     clientId      : 'abc123',
     clientSecret  : 'ssh-secret',
-  });
+  }).catch(() => console.error('Client created: Samplr'));
   await models.clients.create({
     id            : '2',
     name          : 'Samplr2',
     clientId      : 'xyz123',
     clientSecret  : 'ssh-password',
-  });
+  }).catch(() => console.error('Client created: Samplr2'));
   await models.clients.create({
     id            : '3',
     name          : 'Samplr3',
     clientId      : 'trustedClient',
     clientSecret  : 'ssh-otherpassword',
     trustedClient : true,
-  });
+  }).catch(() => console.error('Client created: Samplr3'));
 }
 models.sequelize.sync().then(() => { testClients(); });
+
+const findQuery = async (where) => {
+  try {
+    const result = await models.clients.findOne({
+      where: where
+    });
+
+    if (result === null) {
+      return Promise.resolve(undefined);
+    }
+    return Promise.resolve({
+      id           : result.id,
+      name         : result.name,
+      clientId     : result.clientId,
+      clientSecret : result.clientSecret,
+    })
+  } catch (error) {
+    return Promise.resolve(undefined);
+  }
+}
 
 /**
  * Returns a client if it finds one, otherwise returns null if a client is not found.
  * @param   {String}   id   - The unique id of the client to find
  * @returns {Promise}  resolved promise with the client if found, otherwise undefined
  */
-exports.find = id => {
-  return models.clients.findOne({
-    where: {
-      id: id
-    }
-  });
+exports.find = async (id) => {
+  return findQuery({ id: id });
 };
 
 /**
@@ -64,9 +80,5 @@ exports.find = id => {
  * @returns {Promise} resolved promise with the client if found, otherwise undefined
  */
 exports.findByClientId = (clientId) => {
-  return models.clients.findOne({
-    where: {
-      clientId: clientId
-    }
-  });
+  return findQuery({ clientId: clientId });
 };

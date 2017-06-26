@@ -71,11 +71,12 @@ validate.userJson = (response, body) => {
   expect(response.statusCode).to.eql(200);
   const jsonResponse = JSON.parse(body);
   expect(response.headers['content-type']).to.eql('application/json; charset=utf-8');
-  expect(Object.keys(jsonResponse)).to.have.lengthOf(3);
+  expect(Object.keys(jsonResponse)).to.have.lengthOf(4);
   expect(jsonResponse).to.eql({
-    user_id : '1',
+    user_id : 1,
     name    : 'Bob Smith',
     scope   : '*',
+    email   : 'a@ex.com',
   });
 };
 

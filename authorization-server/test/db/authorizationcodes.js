@@ -27,12 +27,12 @@ describe('authorizationCodes', () => {
 
     it('should find a token saved', () => {
       const token = utils.createToken();
-      return authorizationCodes.save(token, '1', 'http://google.com', '1', '*')
+      return authorizationCodes.save(token, 1, 'http://google.com', 1, '*')
       .then(() => authorizationCodes.find(token))
       .then(foundToken => expect(foundToken).to.eql({
-        clientID    : '1',
+        clientID    : 1,
         redirectURI : 'http://google.com',
-        userID      : '1',
+        userID      : 1,
         scope       : '*',
       }));
     });
@@ -41,18 +41,18 @@ describe('authorizationCodes', () => {
   describe('#save', () => {
     it('should save an authorization token correctly and return that token', () => {
       const token = utils.createToken();
-      return authorizationCodes.save(token, '1', 'http://google.com', '1', '*')
+      return authorizationCodes.save(token, 1, 'http://google.com', 1, '*')
       .then(saved => expect(saved).to.eql({
-        clientID    : '1',
+        clientID    : 1,
         redirectURI : 'http://google.com',
-        userID      : '1',
+        userID      : 1,
         scope       : '*',
       }))
       .then(() => authorizationCodes.find(token))
       .then(foundToken => expect(foundToken).to.eql({
-        clientID    : '1',
+        clientID    : 1,
         redirectURI : 'http://google.com',
-        userID      : '1',
+        userID      : 1,
         scope       : '*',
       }));
     });
@@ -73,12 +73,12 @@ describe('authorizationCodes', () => {
 
     it('should delete an authorization token and return it', () => {
       const token = utils.createToken();
-      return authorizationCodes.save(token, '1', 'http://google.com', '1', '*')
+      return authorizationCodes.save(token, 1, 'http://google.com', 1, '*')
       .then(() => authorizationCodes.delete(token))
       .then(deletedToken => expect(deletedToken).to.eql({
-        clientID    : '1',
+        clientID    : 1,
         redirectURI : 'http://google.com',
-        userID      : '1',
+        userID      : 1,
         scope       : '*',
       }))
       .then(() => authorizationCodes.find(token))
