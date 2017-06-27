@@ -2,22 +2,22 @@ module.exports = (sequelize, DataTypes) => {
   return sequelize.define('users', {
     username: {
       type: DataTypes.STRING,
-      unique: true
+      unique: true,
     },
     salt: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     password: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     name: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     email: {
       type: DataTypes.STRING,
-      unique: true
-    }
+      unique: true,
+    },
   }, {
-    freezeTableName: true // Model tableName will be the same as the model name
+    freezeTableName: true, // Model tableName will be the same as the model name
   });
-}
+};

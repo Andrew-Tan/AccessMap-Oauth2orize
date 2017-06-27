@@ -1,22 +1,22 @@
-module.exports = function (sequelize, DataTypes) {
+module.exports = (sequelize, DataTypes) => {
   return sequelize.define('authorization_codes', {
     code: {
       type: DataTypes.STRING,
-      primaryKey: true
+      primaryKey: true,
     },
     clientID: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
     },
     redirectURI: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     userID: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
     },
     scope: {
-      type: DataTypes.JSONB
-    }
+      type: DataTypes.JSONB,
+    },
   }, {
-    freezeTableName: true // Model tableName will be the same as the model name
+    freezeTableName: true, // Model tableName will be the same as the model name
   });
-}
+};

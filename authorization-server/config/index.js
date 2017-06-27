@@ -78,7 +78,7 @@ exports.database = {
     storage: './userdata.sqlite',
     logging: true,
   },
-  //  NOTE: DO NOT MODIFY preset "test" as it is used for unit tests. Change "mode"
+  // NOTE: DO NOT MODIFY preset "test" as it is used for unit tests. Change "mode"
   // to it during unit testing.
   test: {
     dialect: 'sqlite',
@@ -102,6 +102,6 @@ exports.database = {
 exports.email = {
   auth: {
     api_key: 'secret',
-    domain: 'passcode'
-  }
+    domain: 'passcode',
+  },
 };

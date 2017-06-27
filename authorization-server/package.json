@@ -1,13 +1,13 @@
 {
-  "name": "oauth2orize-authorization-server",
+  "name": "AccessMap-Oauth2orize",
   "version": "6.3.4",
-  "author": "Frank Hassanabad <frankhassanabad@gmail.com>",
-  "description": "OAuth2 security recipes and examples based on OAuth2orize",
+  "author": "Andrew Tan",
+  "description": "AccessMap Oauth2 based on OAuth2orize",
   "license": "MIT",
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/FrankHassanabad/Oauth2orizeRecipes.git"
+    "url": "https://github.com/Andrew-Tan/AccessMap-Oauth2orize.git"
   },
   "dependencies": {
     "bcrypt": "^1.0.2",
