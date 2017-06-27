@@ -114,9 +114,7 @@ exports.delete = async (token) => {
 exports.removeAll = () => {
   // TODO: is not returning the correct thing.
   return models.refresh_tokens.destroy({
-    where: {
-      token: '*'
-    },
+    where: {},
     truncate: true
   });
 };

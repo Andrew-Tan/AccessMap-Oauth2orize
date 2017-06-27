@@ -1,6 +1,7 @@
 'use strict';
 
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
 
 // The access tokens.
 // You will use these to access your end point data through the means outlined
@@ -121,7 +122,7 @@ exports.removeExpired = () => {
   // TODO: is not returning the correct thing.
   return models.access_tokens.destroy({
     where: {
-      expirationDate: { $lt: new Date() }
+      expirationDate: { $lt: moment() }
     },
   });
 };
@@ -133,10 +134,6 @@ exports.removeExpired = () => {
 exports.removeAll = () => {
   // TODO: is not returning the correct thing.
   return models.access_tokens.destroy({
-    where: {
-      token: '*'
-    },
-    returning: true,
-    truncate: true
+    where: {},
   });
 };

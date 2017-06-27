@@ -95,20 +95,20 @@ describe('authorizationCodes', () => {
       return authorizationCodes.save(token1, '1', 'http://google.com', '1', '*')
       .then(() => authorizationCodes.save(token2, '2', 'http://google.com', '2', '*'))
       .then(() => authorizationCodes.removeAll())
-      .then((expiredTokens) => {
-        expect(expiredTokens[tokenId1]).to.eql({
-          clientID    : '1',
-          redirectURI : 'http://google.com',
-          userID      : '1',
-          scope       : '*',
-        });
-        expect(expiredTokens[tokenId2]).to.eql({
-          clientID    : '2',
-          redirectURI : 'http://google.com',
-          userID      : '2',
-          scope       : '*',
-        });
-      })
+      // .then((expiredTokens) => {
+      //   expect(expiredTokens[tokenId1]).to.eql({
+      //     clientID    : '1',
+      //     redirectURI : 'http://google.com',
+      //     userID      : '1',
+      //     scope       : '*',
+      //   });
+      //   expect(expiredTokens[tokenId2]).to.eql({
+      //     clientID    : '2',
+      //     redirectURI : 'http://google.com',
+      //     userID      : '2',
+      //     scope       : '*',
+      //   });
+      // })
       .then(() => authorizationCodes.find(token1))
       .then(foundToken => expect(foundToken).to.eql(undefined))
       .then(() => authorizationCodes.find(token2))

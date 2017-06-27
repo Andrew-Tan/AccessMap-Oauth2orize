@@ -121,10 +121,6 @@ exports.delete = async (token) => {
 exports.removeAll = () => {
   // TODO: is not returning the correct thing.
   return models.authorization_codes.destroy({
-    where: {
-      code: '*'
-    },
-    returning: true,
-    truncate: true
+    where: {},
   });
 };
