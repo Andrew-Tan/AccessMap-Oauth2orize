@@ -28,7 +28,11 @@ exports.illust = (req, res) => {
  * @returns {undefined}
  */
 exports.loginForm = (req, res) => {
-  res.render('login');
+  if (req.user) {
+    res.redirect('/');
+  } else {
+    res.render('login');
+  }
 };
 
 /**
