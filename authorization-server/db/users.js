@@ -1,6 +1,6 @@
 'use strict';
 const models = require('./models');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 
 /**
  * This is the configuration of the users that are allowed to connected to your authorization

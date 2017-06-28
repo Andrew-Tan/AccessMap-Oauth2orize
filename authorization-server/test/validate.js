@@ -6,7 +6,7 @@ const chai      = require('chai');
 const sinonChai = require('sinon-chai');
 const utils     = require('../routes/utils');
 const validate  = require('../routes/validate');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 
 chai.use(sinonChai);
 const expect = chai.expect;

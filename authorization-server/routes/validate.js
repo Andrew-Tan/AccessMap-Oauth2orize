@@ -4,7 +4,7 @@ const config  = require('../config/index');
 const db      = require('../db/index');
 const utils   = require('./utils');
 const process = require('process');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 
 /** Validate object to attach all functions to  */
 const validate = Object.create(null);
