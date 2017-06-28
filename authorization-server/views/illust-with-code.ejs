@@ -39,7 +39,7 @@
           type: 'POST',
           dataType: 'json',
           url: "/oauth/token",
-          data: 'code=' + code + '&redirect_uri=' + host + '&client_id=abc123&client_secret=ssh-secret&grant_type=authorization_code',
+          data: 'code=' + code + '&redirect_uri=' + host + window.location.pathname + '&client_id=abc123&client_secret=ssh-secret&grant_type=authorization_code',
           success: function (result) {
             $("#authCode").hide();
             $("#accessTokenDiv").show();
