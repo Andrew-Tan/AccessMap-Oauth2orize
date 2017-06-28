@@ -5,7 +5,9 @@ const db = require('../db/index');
 const utils = require('./utils');
 const nodemailer = require('nodemailer');
 const mg = require('nodemailer-mailgun-transport');
-const config = require('../config/index')
+const config = require('../config/index');
+const validate    = require('./validate');
+const login    = require('connect-ensure-login');
 
 // transporter to send Email
 // TODO: move auth config to config
@@ -110,14 +112,47 @@ exports.reset = (request, response) => {
     const decoded = utils.verifyToken(token);
     const userID = decoded.sub;
     const password = request.body.password;
-    const confirmed_password = request.body.confirm_password;
-    if (password !== confirmed_password) {
+    const confirmedPassword = request.body.confirm_password;
+    if (password !== confirmedPassword) {
       return response.render('info', { message: ['Inconsistent Password'] });
     }
     db.users.updatePassword(userID, password).then(result => {
-      response.end('Password updated for userID: ' + userID);
+      response.render('info', { message: ['Password updated'] });
     });
   } catch (err) {
     return response.render('info', { message: ['Incorrect Token'] });
   }
 };
+
+exports.modifyForm = [
+  login.ensureLoggedIn(),
+  (request, response) => {
+    response.render('modify', { user: request.user, message: request.flash('info') });
+  },
+];
+
+exports.modify = [
+  login.ensureLoggedIn(),
+  async (request, response) => {
+    let message = ['Failed to modify profile'];
+
+    try {
+      const newProfile = {
+        name: request.body.name,
+        email: request.body.email,
+      };
+
+      if (validate.userProfile(newProfile)) {
+        const result = await db.users.updateProfile(request.user.id, newProfile);
+        if (result) {
+          message = ['Profile Modified'];
+        }
+      }
+    } catch (error) {
+      console.error('Error Updating Profile for user ID: ', request.user.id);
+    } finally {
+      request.flash('info', message);
+      response.redirect('/account/modify');
+    }
+  },
+];

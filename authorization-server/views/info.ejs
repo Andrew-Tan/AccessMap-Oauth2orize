@@ -14,7 +14,7 @@
 <body>
 
 <!-- HTML login screen form -->
-<form action="/" class="pure-form pure-form-stacked">
+<form class="pure-form pure-form-stacked">
   <fieldset>
     <!-- Upper box with Title, username, and password -->
     <div class="upper-box">
@@ -33,7 +33,12 @@
     <!-- Bottom box with Sign in -->
     <div class="bottom-box">
       <div class="pure-controls sign-in-button">
-        <button type="submit" value="Submit" class="pure-button pure-button-primary">Home</button>
+        <button onclick="window.history.back();" class="pure-button pure-button-primary">Back</button>
+      </div>
+      <div class="pure-controls sign-in-button">
+        <a href="/">
+          <button class="pure-button pure-button-primary">Home</button>
+        </a>
       </div>
     </div>
   </fieldset>

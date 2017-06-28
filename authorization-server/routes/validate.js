@@ -59,6 +59,26 @@ validate.userExists = (user) => {
 };
 
 /**
+ * Given a user this will return the user if it exists otherwise this will throw an error
+ * @param   {Object} userProfile - The user profile
+ * @throws  {Error}  If the user does not exist or the password does not match
+ * @returns {Object} true if valid
+ */
+validate.userProfile = (userProfile) => {
+  // TODO: implement more sophisticated check
+  if (userProfile == null) {
+    validate.logAndThrow('Profile is null');
+  }
+  if (userProfile.name == null || userProfile.name === '') {
+    validate.logAndThrow('Invalid name');
+  }
+  if (userProfile.email == null || userProfile.email === '') {
+    validate.logAndThrow('Invalid Email');
+  }
+  return true;
+};
+
+/**
  * Given a client and a client secret this return the client if it exists and its clientSecret
  * matches, otherwise this will throw an error
  * @param   {Object} client       - The client profile

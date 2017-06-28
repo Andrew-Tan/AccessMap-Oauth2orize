@@ -82,18 +82,44 @@ exports.createUser = (usrinfo) => {
 /**
  * Update the password of a user
  * @param   {Number}   userid - the if of a existing user
- * @param   {String}    newpassword - the new password
- * @returns {Promise}
+ * @param   {String}   newpassword - the new password
+ * @returns {Promise}  resolve true if modified, false otherwise
  */
-exports.updatePassword = (userid, newpassword) => {
-  const salt = bcrypt.genSaltSync(10);
-  return models.users.update({
-    salt: salt,
-    password: bcrypt.hashSync(newpassword, salt)
-  }, {
-    where: { id: userid },
-    returning: true
-  });
+exports.updatePassword = async (userid, newpassword) => {
+  try {
+    const salt = bcrypt.genSaltSync(10);
+    await models.users.update({
+      salt: salt,
+      password: bcrypt.hashSync(newpassword, salt)
+    }, {
+      where: { id: userid },
+    });
+    return Promise.resolve(true);
+  } catch (error) {
+    return Promise.resolve(false);
+  }
+}
+
+/**
+ * Update the profile of a user
+ * @param   {Number}   userid - the if of a existing user
+ * @param   {Object}   newProfile - the new profile
+ * @returns {Promise}  resolve true if modified, false otherwise
+ */
+exports.updateProfile = async (userid, newProfile) => {
+  try {
+    const result = await models.users.update(newProfile, {
+      where: { id: userid },
+    });
+
+    if (result[0] > 0) {
+      return Promise.resolve(true);
+    } else {
+      return Promise.resolve(false);
+    }
+  } catch (error) {
+    return Promise.resolve(false);
+  }
 }
 
 // test users

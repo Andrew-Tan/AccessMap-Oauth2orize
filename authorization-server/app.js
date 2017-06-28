@@ -57,7 +57,10 @@ app.get('/oauth/illust',  site.illust);
 app.get('/login',         site.loginForm);
 app.post('/login',        site.login);
 app.get('/logout',        site.logout);
+
 app.get('/account',       site.account);
+app.get('/account/modify',user.modifyForm);
+app.post('/account/modify',user.modify);
 
 app.get('/dialog/authorize',           oauth2.authorization);
 app.post('/dialog/authorize/decision', oauth2.decision);
