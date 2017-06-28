@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>AccessMap OAuth2Orize Login</title>
+  <!-- Needed for mobile sites to work -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Style sheets -->
+  <link rel="stylesheet" type="text/css" href="/stylesheets/pure-min.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/base.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/sign-in-modules.css">
+</head>
+<body>
+
+<!-- HTML login screen form -->
+<form action="/account/modify" method="post" class="pure-form pure-form-stacked">
+  <fieldset>
+    <!-- Upper box with Title, username, and password -->
+    <div class="upper-box">
+      <!-- Title -->
+      <div>
+        <h1 class="title-padding">Modify Profile</h1>
+      </div>
+      <div class="pure-control-group">
+        <label class="labels" for="userid">User ID:</label>
+
+        <div class="input-fields">
+          <input class="pure-input-1 input-fields" id="userid" type="text" value="<%= user.id %>" name="userid" readonly/>
+        </div>
+      </div>
+      <div class="pure-control-group">
+        <label class="labels" for="username">User Name:</label>
+
+        <div class="input-fields">
+          <input class="pure-input-1 input-fields" id="username" type="text" value="<%= user.username %>" name="username" readonly/>
+        </div>
+      </div>
+      <div class="pure-control-group">
+        <label class="labels" for="name">Name:</label>
+
+        <div class="input-fields">
+          <input class="pure-input-1 input-fields" id="name" type="text" value="<%= user.name %>" name="name"/>
+        </div>
+      </div>
+      <div class="pure-control-group">
+        <label class="labels" for="email">Email:</label>
+
+        <div class="input-fields">
+          <input class="pure-input-1 input-fields" id="email" type="text" value="<%= user.email %>" name="email"/>
+        </div>
+      </div>
+      <% if (message.length > 0) { %>
+      <div class="pure-control-group labels">
+        <p>
+          <p style="color:red;"><%= message[0] %></p>
+        </p>
+      </div>
+      <% } %>
+    </div>
+    <!-- Bottom box with Sign in -->
+    <div class="bottom-box">
+      <div class="pure-controls sign-in-button">
+        <button type="submit" value="Submit" class="pure-button pure-button-primary">Confirm</button>
+      </div>
+    </div>
+  </fieldset>
+  <div class="from-text">
+    <a href="https://github.com/FrankHassanabad/Oauth2orizeRecipes">
+      From OAuth2OrizeRecipes
+    </a>
+  </div>
+</form>
+
+</body>
+</html>

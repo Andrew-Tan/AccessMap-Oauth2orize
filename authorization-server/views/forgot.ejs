@@ -14,40 +14,34 @@
 <body>
 
 <!-- HTML login screen form -->
-<form action="/login" method="post" class="pure-form pure-form-stacked">
+<form action="/forgot" method="post" class="pure-form pure-form-stacked">
   <fieldset>
     <!-- Upper box with Title, username, and password -->
     <div class="upper-box">
       <!-- Title -->
       <div>
-        <h1 class="title-padding">Authorization Server</h1>
+        <h1 class="title-padding">Forgot Password</h1>
       </div>
       <div class="pure-control-group">
         <!-- Username label and input -->
-        <label class="labels" for="name">Username:</label>
+        <label class="labels" for="email">Email:</label>
 
         <div class="input-fields">
-          <input class="pure-input-1 input-fields" id="name" type="text" placeholder="Hint: bob" name="username"/>
+          <input class="pure-input-1 input-fields" id="email" type="email" name="email"/>
         </div>
       </div>
-      <div class="pure-control-group">
-        <!-- Password label and input -->
-        <label class="labels" for="password">Password:</label>
-
-        <div class="input-fields">
-          <input class="pure-input-1 input-fields" id="password" type="password" placeholder="Hint: secret"
-                 name="password"/>
-        </div>
+      <% if (message.length > 0) { %>
+      <div class="pure-control-group labels">
+        <p>
+        <p style="color:red;"><%= message[0] %></p>
+        </p>
       </div>
-      <div class="pure-control-group">
-        <!-- Password label and input -->
-        <label class="labels"><a href="/forgot">Forgot your password?</a></label>
-      </div>
+      <% } %>
     </div>
     <!-- Bottom box with Sign in -->
     <div class="bottom-box">
       <div class="pure-controls sign-in-button">
-        <button type="submit" value="Submit" class="pure-button pure-button-primary">Sign in</button>
+        <button type="submit" value="Submit" class="pure-button pure-button-primary">Reset Password</button>
       </div>
     </div>
   </fieldset>

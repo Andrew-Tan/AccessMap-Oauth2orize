@@ -7,8 +7,8 @@
 // through a process of the user granting access, and the client exchanging
 // the grant for an access token.
 
-const config      = require('./config');
-const db          = require('./db');
+const config      = require('../config/index');
+const db          = require('../db/index');
 const login       = require('connect-ensure-login');
 const oauth2orize = require('oauth2orize');
 const passport    = require('passport');
@@ -160,6 +160,7 @@ exports.authorization = [
       if (client) {
         client.scope = scope; // eslint-disable-line no-param-reassign
       }
+      // TODO:
       // WARNING: For security purposes, it is highly advisable to check that
       //          redirectURI provided by the client matches one registered with
       //          the server.  For simplicity, this example does not.  You have
@@ -174,7 +175,7 @@ exports.authorization = [
     // the clients then they will have to re-consent.
     db.clients.findByClientId(req.query.client_id)
     .then((client) => {
-      if (client != null && client.trustedClient && client.trustedClient === true) {
+      if (client !== null && client.trustedClient && client.trustedClient === true) {
         // This is how we short call the decision like the dialog below does
         server.decision({ loadTransaction: false }, (serverReq, callback) => {
           callback(null, { allow: true });

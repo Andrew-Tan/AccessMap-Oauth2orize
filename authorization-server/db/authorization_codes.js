@@ -10,7 +10,6 @@ const jwt = require('jsonwebtoken');
 /**
  * Authorization codes sequelize data structure which stores all of the authorization codes
  */
-// let codes = Object.create(null);
 const models = require('./models');
 
 /**
@@ -18,26 +17,24 @@ const models = require('./models');
  * @param   {String}  token - The token to decode to get the id of the authorization token to find.
  * @returns {Promise} resolved with the authorization code if found, otherwise undefined
  */
-exports.find = (token) => {
+exports.find = async (token) => {
   try {
     const id = jwt.decode(token).jti;
-    return models.authorization_codes.findOne({
+    const result = await models.authorization_codes.findOne({
       where: {
         code: id
       }
     });
-    // .then(code => {
-    //   if (code === null) {
-    //     return Promise.resolve(undefined);
-    //   }
-    //   return Promise.resolve({
-    //     clientID: code.clientID,
-    //     redirectURI: code.redirectURI,
-    //     userID: code.userID,
-    //     scope: code.scope
-    //   });
-    // });
-    // return Promise.resolve(codes[id]);
+
+    if (result === null) {
+      return Promise.resolve(undefined);
+    }
+    return Promise.resolve({
+      clientID: result.clientID,
+      redirectURI: result.redirectURI,
+      scope: result.scope,
+      userID: result.userID
+    });
   } catch (error) {
     return Promise.resolve(undefined);
   }
@@ -56,25 +53,25 @@ exports.find = (token) => {
  */
 exports.save = async (code, clientID, redirectURI, userID, scope) => {
   const id = jwt.decode(code).jti;
-  // codes[id] = { clientID, redirectURI, userID, scope };
-  // return Promise.resolve(codes[id]);
-  const newEntry = {
-    code: id,
+
+  try {
+    await models.authorization_codes.create({
+      code: id,
+      clientID: clientID,
+      redirectURI: redirectURI,
+      userID: userID,
+      scope: scope
+    });
+  } catch (error) {
+    return Promise.resolve(undefined);
+  }
+
+  return Promise.resolve({
     clientID: clientID,
     redirectURI: redirectURI,
     userID: userID,
     scope: scope
-  };
-
-  // TODO: fix logic
-  await models.authorization_codes.create(newEntry);
-  return Promise.resolve(newEntry);
-  // .then(() => {
-  //   return Promise.resolve(newEntry);
-  // })
-  // .catch(error => {
-  //   return Promise.resolve(undefined);
-  // });
+  });
 };
 
 /**
@@ -84,8 +81,10 @@ exports.save = async (code, clientID, redirectURI, userID, scope) => {
  */
 exports.delete = async (token) => {
   try {
+    await models.sequelize.sync();
     const id = jwt.decode(token).jti;
-    var deletedEntry;
+    let deletedEntry = undefined;
+    // TODO: Some sync problems here! the transaction mysteriously stopped & return? But executing again?...
     await models.sequelize.transaction(t => {
       return models.authorization_codes.findOne({
         where: {
@@ -104,7 +103,12 @@ exports.delete = async (token) => {
         }, {transaction: t});
       });
     });
-    return Promise.resolve(deletedEntry);
+    return Promise.resolve({
+      clientID: deletedEntry.clientID,
+      redirectURI: deletedEntry.redirectURI,
+      scope: deletedEntry.scope,
+      userID: deletedEntry.userID
+    });
   } catch (error) {
     return Promise.resolve(undefined);
   }
@@ -115,14 +119,8 @@ exports.delete = async (token) => {
  * @returns {Promise} resolved with all removed authorization codes returned
  */
 exports.removeAll = () => {
-  // const deletedTokens = codes;
-  // codes               = Object.create(null);
-  // return Promise.resolve(deletedTokens);
-  // TODO: might not return the correct value in promise
+  // TODO: is not returning the correct thing.
   return models.authorization_codes.destroy({
-    where: {
-      code: '*'
-    },
-    truncate: true
+    where: {},
   });
 };

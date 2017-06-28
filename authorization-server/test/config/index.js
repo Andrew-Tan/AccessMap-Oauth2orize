@@ -34,7 +34,7 @@ describe('config', () => {
   });
 
   it('should have session maxAge as a number', () => {
-    expect(config.session.maxAge).to.be.a('number');
+    expect(config.session.cookie.maxAge).to.be.a('number');
   });
 
   it('should have session secret as a string', () => {

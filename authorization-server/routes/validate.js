@@ -1,10 +1,10 @@
 'use strict';
 
-const config  = require('./config');
-const db      = require('./db');
+const config  = require('../config/index');
+const db      = require('../db/index');
 const utils   = require('./utils');
 const process = require('process');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 
 /** Validate object to attach all functions to  */
 const validate = Object.create(null);
@@ -56,6 +56,26 @@ validate.userExists = (user) => {
     validate.logAndThrow('User does not exist');
   }
   return user;
+};
+
+/**
+ * Given a user this will return the user if it exists otherwise this will throw an error
+ * @param   {Object} userProfile - The user profile
+ * @throws  {Error}  If the user does not exist or the password does not match
+ * @returns {Object} true if valid
+ */
+validate.userProfile = (userProfile) => {
+  // TODO: implement more sophisticated check
+  if (userProfile == null) {
+    validate.logAndThrow('Profile is null');
+  }
+  if (userProfile.name == null || userProfile.name === '') {
+    validate.logAndThrow('Invalid name');
+  }
+  if (userProfile.email == null || userProfile.email === '') {
+    validate.logAndThrow('Invalid Email');
+  }
+  return true;
 };
 
 /**
