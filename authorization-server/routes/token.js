@@ -24,7 +24,7 @@ const validate = require('./validate');
  * @param   {Object}  res - The response
  * @returns {Promise} Returns the promise for testing only
  */
-exports.info = (req, res) =>
+exports.info = (req, res) => {
   validate.tokenForHttp(req.query.access_token)
   .then(() => db.accessTokens.find(req.query.access_token))
   .then(token => validate.tokenExistsForHttp(token))
@@ -40,6 +40,7 @@ exports.info = (req, res) =>
     res.status(err.status);
     res.json({ error: err.message });
   });
+};
 
 /**
  * This endpoint is for revoking a token.  This has the same signature to
@@ -62,7 +63,7 @@ exports.info = (req, res) =>
  * @param   {Object}  res - The response
  * @returns {Promise} Returns the promise for testing
  */
-exports.revoke = (req, res) =>
+exports.revoke = (req, res) => {
   validate.tokenForHttp(req.query.token)
   .then(() => db.accessTokens.delete(req.query.token))
   .then((token) => {
@@ -79,3 +80,4 @@ exports.revoke = (req, res) =>
     res.status(err.status);
     res.json({ error: err.message });
   });
+};

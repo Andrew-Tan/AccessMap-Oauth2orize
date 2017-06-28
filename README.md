@@ -1,6 +1,8 @@
 OAuth2orizeRecipes
 ==================
 
+[![Build Status](https://api.travis-ci.org/Andrew-Tan/AccessMap-Oauth2orize.svg?branch=master)](https://travis-ci.org/Andrew-Tan/AccessMap-Oauth2orize)
+
 AccessMap OAuth2 authorization server based on [OAuth2orizeRecipes](https://github.com/FrankHassanabad/Oauth2orizeRecipes).
 
 <p align="center">
