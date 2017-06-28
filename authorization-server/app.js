@@ -52,11 +52,12 @@ app.use(passport.session());
 // Passport configuration
 require('./routes/auth');
 
-app.get('/',        site.index);
-app.get('/login',   site.loginForm);
-app.post('/login',  site.login);
-app.get('/logout',  site.logout);
-app.get('/account', site.account);
+app.get('/',              site.index);
+app.get('/oauth/illust',  site.illust);
+app.get('/login',         site.loginForm);
+app.post('/login',        site.login);
+app.get('/logout',        site.logout);
+app.get('/account',       site.account);
 
 app.get('/dialog/authorize',           oauth2.authorization);
 app.post('/dialog/authorize/decision', oauth2.decision);

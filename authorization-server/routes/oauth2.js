@@ -160,6 +160,7 @@ exports.authorization = [
       if (client) {
         client.scope = scope; // eslint-disable-line no-param-reassign
       }
+      // TODO:
       // WARNING: For security purposes, it is highly advisable to check that
       //          redirectURI provided by the client matches one registered with
       //          the server.  For simplicity, this example does not.  You have

@@ -3,17 +3,21 @@
 const login    = require('connect-ensure-login');
 const passport = require('passport');
 
+exports.index = (req, res) => {
+  res.render('index', { user: req.user });
+};
+
 /**
  * Render the index.ejs or index-with-code.js depending on if query param has code or not
  * @param   {Object} req - The request
  * @param   {Object} res - The response
  * @returns {undefined}
  */
-exports.index = (req, res) => {
+exports.illust = (req, res) => {
   if (!req.query.code) {
-    res.render('index', { user: req.user });
+    res.render('illust', { user: req.user });
   } else {
-    res.render('index-with-code');
+    res.render('illust-with-code');
   }
 };
 
