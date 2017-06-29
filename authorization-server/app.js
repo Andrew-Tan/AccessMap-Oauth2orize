@@ -1,7 +1,7 @@
 'use strict';
 
 const bodyParser     = require('body-parser');
-const client         = require('./client');
+const client         = require('./routes/client');
 const cookieParser   = require('cookie-parser');
 const config         = require('./config');
 const db             = require('./db');
@@ -9,12 +9,14 @@ const express        = require('express');
 const expressSession = require('express-session');
 const fs             = require('fs');
 const https          = require('https');
-const oauth2         = require('./oauth2');
+const oauth2         = require('./routes/oauth2');
 const passport       = require('passport');
 const path           = require('path');
-const site           = require('./site');
-const token          = require('./token');
-const user           = require('./user');
+const site           = require('./routes/site');
+const token          = require('./routes/token');
+const user           = require('./routes/user');
+
+const flash = require('connect-flash');
 
 // console.log('Using MemoryStore for the data store');
 // console.log('Using MemoryStore for the Session');
@@ -28,6 +30,7 @@ const models = require('./db').models;
 const app = express();
 app.set('view engine', 'ejs');
 app.use(cookieParser());
+app.use(flash());
 
 // Session Configuration
 app.use(expressSession({
@@ -47,13 +50,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Passport configuration
-require('./auth');
+require('./routes/auth');
 
-app.get('/',        site.index);
-app.get('/login',   site.loginForm);
-app.post('/login',  site.login);
-app.get('/logout',  site.logout);
-app.get('/account', site.account);
+app.get('/',              site.index);
+app.get('/oauth/illust',  site.illust);
+app.get('/login',         site.loginForm);
+app.post('/login',        site.login);
+app.get('/logout',        site.logout);
+
+app.get('/account',       site.account);
+app.get('/account/modify',user.modifyForm);
+app.post('/account/modify',user.modify);
 
 app.get('/dialog/authorize',           oauth2.authorization);
 app.post('/dialog/authorize/decision', oauth2.decision);
@@ -64,6 +71,11 @@ app.get('/api/clientinfo', client.info);
 
 app.get('/register', user.registerForm);
 app.post('/register', user.registerUser);
+
+app.get('/forgot', user.forgotForm);
+app.post('/forgot', user.forgot);
+app.get('/reset/:token', user.resetForm);
+app.post('/reset/:token', user.reset);
 
 // Mimicking google's token info endpoint from
 // https://developers.google.com/accounts/docs/OAuth2UserAgent#validatetoken
@@ -97,8 +109,9 @@ app.use((err, req, res, next) => {
 // From time to time we need to clean up any expired tokens
 // in the database
 setInterval(() => {
+  // remove expired access token
   db.accessTokens.removeExpired()
-  .catch(err => console.error('Error trying to remove expired tokens:', err.stack));
+  .catch(err => console.error('Error trying to remove expired access tokens:', err.stack));
 }, config.db.timeToCheckExpiredTokens * 1000);
 
 // TODO: Change these for your own certificates.  This was generated through the commands:

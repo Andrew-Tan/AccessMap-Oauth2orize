@@ -63,27 +63,45 @@ exports.session = {
   secret : 'A Secret That Should Be Changed',
 };
 
+/**
+ * Database configuration
+ *
+ * mode - presets to use when loading database, must be one of the presets defined
+ * development - development preset
+ * test - test preset
+ * production - production preset
+ */
 exports.database = {
-  mode: 'development',
+  mode: 'test',
   development: {
     dialect: 'sqlite',
     storage: './userdata.sqlite',
-    logging: true
+    logging: true,
   },
+  // NOTE: DO NOT MODIFY preset "test" as it is used for unit tests. Change "mode"
+  // to it during unit testing.
   test: {
     dialect: 'sqlite',
-    storage: ':memory:'
+    storage: './userdata.sqlite',
+    logging: false,
   },
   production: {
     dialect: 'mssql',
     host: 'hidden',
     port: 1433,
     dialectOptions: {
-      encrypt: true
+      encrypt: true,
     },
     database: 'hidden',
     username: 'hidden',
     password: 'hidden',
-    logging: false
-  }
-}
+    logging: false,
+  },
+};
+
+exports.email = {
+  auth: {
+    api_key: 'secret',
+    domain: 'passcode',
+  },
+};

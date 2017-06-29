@@ -6,7 +6,7 @@ const promisify  = require('es6-promisify');
 const properties = require('./common').properties;
 const request    = require('request').defaults({ jar: true, strictSSL: false }); // eslint-disable-line
 const sinonChai  = require('sinon-chai');
-const utils      = require('../../utils');
+const utils      = require('../../routes/utils');
 const validate   = require('./common').validate;
 
 const get = promisify(request.get, { multiArgs : true });

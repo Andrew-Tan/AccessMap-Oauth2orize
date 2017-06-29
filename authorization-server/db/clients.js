@@ -1,4 +1,5 @@
 'use strict';
+const models = require('./models');
 
 /**
  * This is the configuration of the clients that are allowed to connected to your authorization
@@ -19,36 +20,66 @@
  * gets full scope access without the user having to make a decision to allow or disallow the scope
  * access.
  */
-const clients = [{
-  id            : '1',
-  name          : 'Samplr',
-  clientId      : 'abc123',
-  clientSecret  : 'ssh-secret',
-}, {
-  id            : '2',
-  name          : 'Samplr2',
-  clientId      : 'xyz123',
-  clientSecret  : 'ssh-password',
-}, {
-  id            : '3',
-  name          : 'Samplr3',
-  clientId      : 'trustedClient',
-  clientSecret  : 'ssh-otherpassword',
-  trustedClient : true,
-}];
+
+// Testing clients
+async function testClients() {
+  await models.clients.create({
+    id            : '1',
+    name          : 'Samplr',
+    clientId      : 'abc123',
+    clientSecret  : 'ssh-secret',
+  }).catch(() => console.error('Client created: Samplr'));
+  await models.clients.create({
+    id            : '2',
+    name          : 'Samplr2',
+    clientId      : 'xyz123',
+    clientSecret  : 'ssh-password',
+  }).catch(() => console.error('Client created: Samplr2'));
+  await models.clients.create({
+    id            : '3',
+    name          : 'Samplr3',
+    clientId      : 'trustedClient',
+    clientSecret  : 'ssh-otherpassword',
+    trustedClient : true,
+  }).catch(() => console.error('Client created: Samplr3'));
+}
+models.sequelize.sync().then(() => { testClients(); });
+
+const findQuery = async (where) => {
+  try {
+    const result = await models.clients.findOne({
+      where: where
+    });
+
+    if (result === null) {
+      return Promise.resolve(undefined);
+    }
+    return Promise.resolve({
+      id           : result.id,
+      name         : result.name,
+      clientId     : result.clientId,
+      clientSecret : result.clientSecret,
+      trustedClient: result.trustedClient,
+    })
+  } catch (error) {
+    return Promise.resolve(undefined);
+  }
+}
 
 /**
  * Returns a client if it finds one, otherwise returns null if a client is not found.
  * @param   {String}   id   - The unique id of the client to find
  * @returns {Promise}  resolved promise with the client if found, otherwise undefined
  */
-exports.find = id => Promise.resolve(clients.find(client => client.id === id));
+exports.find = async (id) => {
+  return findQuery({ id: id });
+};
 
 /**
  * Returns a client if it finds one, otherwise returns null if a client is not found.
  * @param   {String}   clientId - The unique client id of the client to find
- * @param   {Function} done     - The client if found, otherwise returns undefined
  * @returns {Promise} resolved promise with the client if found, otherwise undefined
  */
-exports.findByClientId = clientId =>
-  Promise.resolve(clients.find(client => client.clientId === clientId));
+exports.findByClientId = (clientId) => {
+  return findQuery({ clientId: clientId });
+};

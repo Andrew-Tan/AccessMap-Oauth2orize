@@ -16,7 +16,7 @@ describe('clients', () => {
     clients.find('1')
     .then((client) => {
       expect(client).to.contain({
-        id           : '1',
+        id           : 1,
         name         : 'Samplr',
         clientId     : 'abc123',
         clientSecret : 'ssh-secret',
@@ -27,7 +27,7 @@ describe('clients', () => {
     clients.findByClientId('abc123')
     .then((client) => {
       expect(client).to.contain({
-        id           : '1',
+        id           : 1,
         name         : 'Samplr',
         clientId     : 'abc123',
         clientSecret : 'ssh-secret',

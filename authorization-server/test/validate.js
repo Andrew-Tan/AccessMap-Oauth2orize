@@ -4,8 +4,9 @@ require('process').env.OAUTHRECIPES_SURPRESS_TRACE = true;
 
 const chai      = require('chai');
 const sinonChai = require('sinon-chai');
-const utils     = require('../utils');
-const validate  = require('../validate');
+const utils     = require('../routes/utils');
+const validate  = require('../routes/validate');
+const bcrypt = require('bcrypt-nodejs');
 
 chai.use(sinonChai);
 const expect = chai.expect;
@@ -27,19 +28,24 @@ describe('validate', () => {
     });
 
     it('show throw if password does not match', () => {
-      expect(() =>
-        validate.user({ password : 'password' }, 'otherpassword'))
+      const salt = bcrypt.genSaltSync(10);
+      const password = bcrypt.hashSync('password', salt);
+      expect(() => validate.user({ salt, password }, 'otherpassword'))
         .to.throw('User password does not match');
     });
 
     it('show return user if password matches', () => {
-      expect(validate.user({ password: 'password' }, 'password'))
-        .to.eql({ password : 'password' });
+      const salt = bcrypt.genSaltSync(10);
+      const password = bcrypt.hashSync('password', salt);
+      expect(validate.user({ salt, password }, 'password'))
+        .to.eql({ salt, password });
     });
 
     it('show return user if password matches with data', () => {
-      expect(validate.user({ user: 'yo', password: 'password' }, 'password'))
-        .to.eql({ user : 'yo', password : 'password' });
+      const salt = bcrypt.genSaltSync(10);
+      const password = bcrypt.hashSync('password', salt);
+      expect(validate.user({ user: 'yo', salt, password }, 'password'))
+      .to.eql({ user: 'yo', salt, password });
     });
   });
 
@@ -102,44 +108,44 @@ describe('validate', () => {
   describe('#token', () => {
     it('should throw with undefined code', () => {
       expect(() =>
-        validate.token({ userID : '1' }, undefined))
+        validate.token({ userID : 1 }, undefined))
           .to.throw('JsonWebTokenError: jwt must be provided');
     });
 
     it('should throw with null code', () => {
       expect(() =>
-        validate.token({ userID : '1' }, null))
+        validate.token({ userID : 1 }, null))
           .to.throw('JsonWebTokenError: jwt must be provided');
     });
 
     it('should throw with invalid userID', () => {
       const token = utils.createToken();
-      return validate.token({ userID : '-1' }, token)
+      return validate.token({ userID : -1 }, token)
       .catch(err => expect(err.message).to.eql('User does not exist'));
     });
 
     it('should throw with invalid clientID', () => {
       const token = utils.createToken();
-      return validate.token({ clientID: '-1' }, token)
+      return validate.token({ clientID: -1 }, token)
       .catch(err => expect(err.message).to.eql('Client does not exist'));
     });
 
     it('should throw with invalid userID and invalid clientID', () => {
       const token = utils.createToken();
-      return validate.token({ userID : '-1', clientID: '-1' }, token)
+      return validate.token({ userID : -1, clientID: -1 }, token)
       .catch(err => expect(err.message).to.eql('User does not exist'));
     });
 
     it('should return user with valid user', () => {
       const token = utils.createToken();
-      const user  = { userID   : '1' };
+      const user  = { userID   : 1 };
       return validate.token(user, token)
       .then(returnedUser => expect(returnedUser.id).eql(user.userID));
     });
 
     it('should return client with valid client', () => {
       const token = utils.createToken();
-      const client  = { clientID   : '1' };
+      const client  = { clientID   : 1 };
       return validate.token(client, token)
       .then(returnedClient => expect(returnedClient.id).eql(client.clientID));
     });

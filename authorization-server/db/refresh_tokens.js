@@ -8,9 +8,8 @@ const jwt = require('jsonwebtoken');
 // (http://tools.ietf.org/html/rfc6750)
 
 /**
- * Tokens in-memory data structure which stores all of the refresh tokens
+ * Tokens sequelize data structure which stores all of the refresh tokens
  */
-// let tokens = Object.create(null);
 const models = require('./models');
 
 /**
@@ -18,25 +17,23 @@ const models = require('./models');
  * @param   {String}  token - The token to decode to get the id of the refresh token to find.
  * @returns {Promise} resolved with the token
  */
-exports.find = (token) => {
+exports.find = async (token) => {
   try {
     const id = jwt.decode(token).jti;
-    return models.refresh_tokens.findOne({
+    const result = await models.refresh_tokens.findOne({
       where: {
         token: id
       }
     });
-    // .then(code => {
-    //   if (code === null) {
-    //     return Promise.resolve(undefined);
-    //   }
-    //   return Promise.resolve({
-    //     clientID: code.clientID,
-    //     userID: code.userID,
-    //     scope: code.scope
-    //   });
-    // });
-    // return Promise.resolve(codes[id]);
+
+    if (result === null) {
+      return Promise.resolve(undefined);
+    }
+    return Promise.resolve({
+      clientID       : result.clientID,
+      userID         : result.userID,
+      scope          : result.scope,
+    })
   } catch (error) {
     return Promise.resolve(undefined);
   }
@@ -54,23 +51,23 @@ exports.find = (token) => {
  */
 exports.save = async (token, userID, clientID, scope) => {
   const id = jwt.decode(token).jti;
-  // tokens[id] = { userID, clientID, scope };
-  // return Promise.resolve(tokens[id]);
-  const newEntry = {
-    token: id,
-    clientID: clientID,
-    userID: userID,
-    scope: scope
-  };
 
-  await models.refresh_tokens.create(newEntry);
-  return Promise.resolve(newEntry);
-  // .then(() => {
-  //   return Promise.resolve(newEntry);
-  // })
-  // .catch(error => {
-  //   return Promise.resolve(undefined);
-  // });
+  try {
+    await models.refresh_tokens.create({
+      token: id,
+      userID: userID,
+      clientID: clientID,
+      scope: scope
+    });
+  } catch (error) {
+    return Promise.resolve(undefined);
+  }
+
+  return Promise.resolve({
+    userID: userID,
+    clientID: clientID,
+    scope: scope
+  });
 };
 
 /**
@@ -81,7 +78,7 @@ exports.save = async (token, userID, clientID, scope) => {
 exports.delete = async (token) => {
   try {
     const id = jwt.decode(token).jti;
-    let deletedEntry;
+    let deletedEntry = undefined;
     await models.sequelize.transaction(t => {
       return models.refresh_tokens.findOne({
         where: {
@@ -100,7 +97,11 @@ exports.delete = async (token) => {
         }, {transaction: t});
       });
     });
-    return Promise.resolve(deletedEntry);
+    return Promise.resolve({
+      clientID: deletedEntry.clientID,
+      scope: deletedEntry.scope,
+      userID: deletedEntry.userID
+    });
   } catch (error) {
     return Promise.resolve(undefined);
   }
@@ -111,14 +112,9 @@ exports.delete = async (token) => {
  * @returns {Promise} resolved with all removed tokens returned
  */
 exports.removeAll = () => {
-  // const deletedTokens = tokens;
-  // tokens              = Object.create(null);
-  // return Promise.resolve(deletedTokens);
-  // TODO: check for correctness
+  // TODO: is not returning the correct thing.
   return models.refresh_tokens.destroy({
-    where: {
-      token: '*'
-    },
+    where: {},
     truncate: true
   });
 };
