@@ -1,5 +1,6 @@
 'use strict';
 const models = require('./models');
+const config = require('../config/index')
 
 /**
  * This is the configuration of the clients that are allowed to connected to your authorization
@@ -22,28 +23,29 @@ const models = require('./models');
  */
 
 // Testing clients
-async function testClients() {
-  await models.clients.create({
-    id            : '1',
-    name          : 'Samplr',
-    clientId      : 'abc123',
-    clientSecret  : 'ssh-secret',
-  }).catch(() => console.error('Client created: Samplr'));
-  await models.clients.create({
-    id            : '2',
-    name          : 'Samplr2',
-    clientId      : 'xyz123',
-    clientSecret  : 'ssh-password',
-  }).catch(() => console.error('Client created: Samplr2'));
-  await models.clients.create({
-    id            : '3',
-    name          : 'Samplr3',
-    clientId      : 'trustedClient',
-    clientSecret  : 'ssh-otherpassword',
-    trustedClient : true,
-  }).catch(() => console.error('Client created: Samplr3'));
-}
-models.sequelize.sync().then(() => { testClients(); });
+models.sequelize.sync().then(async () => {
+  if (config.deployMode === 'test') {
+    await models.clients.create({
+      id            : 1,
+      name          : 'Samplr',
+      clientId      : 'abc123',
+      clientSecret  : 'ssh-secret',
+    }).catch(() => console.error('Unable to create Client: Samplr'));
+    await models.clients.create({
+      id            : 2,
+      name          : 'Samplr2',
+      clientId      : 'xyz123',
+      clientSecret  : 'ssh-password',
+    }).catch(() => console.error('Unable to create Client: Samplr2'));
+    await models.clients.create({
+      id            : 3,
+      name          : 'Samplr3',
+      clientId      : 'trustedClient',
+      clientSecret  : 'ssh-otherpassword',
+      trustedClient : true,
+    }).catch(() => console.error('Unable to create Client: Samplr3'));
+  }
+});
 
 const findQuery = async (where) => {
   try {

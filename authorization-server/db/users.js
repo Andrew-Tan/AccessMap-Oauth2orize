@@ -1,6 +1,7 @@
 'use strict';
 const models = require('./models');
 const bcrypt = require('bcrypt-nodejs');
+const config = require('../config/index')
 
 /**
  * This is the configuration of the users that are allowed to connected to your authorization
@@ -80,6 +81,16 @@ exports.createUser = (usrinfo) => {
 };
 
 /**
+ * Remove all users in the database, use with caution
+ * @returns {Promise}
+ */
+exports.removeAll = () => {
+  return models.users.destroy({
+    where: {},
+  });
+};
+
+/**
  * Update the password of a user
  * @param   {Number}   userid - the if of a existing user
  * @param   {String}   newpassword - the new password
@@ -124,10 +135,12 @@ exports.updateProfile = async (userid, newProfile) => {
 
 // test users
 models.sequelize.sync().then(async () => {
-  await module.exports.createUser({
-    username: 'bob', password: 'secret', name: 'Bob Smith', email: 'a@ex.com'
-  }, () => {}).catch(() => console.error('User created: bob'));
-  await module.exports.createUser({
-    username: 'joe', password: 'password', name: 'Joe Davis', email: 'b@ex.com'
-  }, () => {}).catch(() => console.error('User created: joe'));
+  if (config.deployMode === 'test') {
+    await module.exports.createUser({
+      username: 'bob', password: 'secret', name: 'Bob Smith', email: 'a@ex.com'
+    }, () => {}).catch(() => console.error('Unable to create user: bob'));
+    await module.exports.createUser({
+      username: 'joe', password: 'password', name: 'Joe Davis', email: 'b@ex.com'
+    }, () => {}).catch(() => console.error('Unable to create user: joe'));
+  }
 });

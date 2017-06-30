@@ -5,6 +5,17 @@
 //
 
 /**
+ * Change this value to switch between production or development environment
+ *
+ * Should be one of the following values:
+ * 'test' -> for testing purpose
+ * 'production' -> for production purpose
+ *
+ * NOTE: this also correspond to the name of the presets in database configuration
+ */
+exports.deployMode = 'test'
+
+/**
  * Configuration of access tokens.
  *
  * expiresIn               - The time in minutes before the access token expires. Default is 60
@@ -66,19 +77,17 @@ exports.session = {
 /**
  * Database configuration
  *
- * mode - presets to use when loading database, must be one of the presets defined
  * development - development preset
  * test - test preset
  * production - production preset
  */
 exports.database = {
-  mode: 'test',
   development: {
     dialect: 'sqlite',
     storage: './userdata.sqlite',
     logging: true,
   },
-  // NOTE: DO NOT MODIFY preset "test" as it is used for unit tests. Change "mode"
+  // NOTE: DO NOT MODIFY preset "test" as it is used for unit tests. Change "deployMode"
   // to it during unit testing.
   test: {
     dialect: 'sqlite',

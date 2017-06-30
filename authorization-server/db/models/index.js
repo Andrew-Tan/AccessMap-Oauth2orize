@@ -2,10 +2,13 @@
 
 const Sequelize = require('sequelize');
 const path = require('path');
-const config = require('../../config/index').database;
+const config = require('../../config/index');
 
-const env = config.mode;
-const preset = config[env];
+const env = config.deployMode;
+const preset = config.database[env];
+if (preset == null) {
+  throw new Error('Database preset not found, check deployMode');
+}
 const fs = require('fs');
 
 const sequelize = new Sequelize(preset.database, preset.username,
