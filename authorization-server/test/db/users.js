@@ -24,32 +24,27 @@ describe('users', () => {
       });
     }));
 
-  it('should find a user by username bob', () =>
-    users.findByUsername('bob')
-    .then((user) => {
-      expect(user).to.contain({
-        id       : 1,
-        username : 'bob',
-        name     : 'Bob Smith',
-        email    : 'a@ex.com',
-      });
-    }));
+  it('should find a user by username bob', async () => {
+    const user = await users.findByUsername('bob');
+    expect(user).to.contain({
+      id: 1,
+      username: 'bob',
+      name: 'Bob Smith',
+      email: 'a@ex.com',
+    });
+  });
 
-  it('should successfully update profile for a valid user', () => {
+  it('should successfully update profile for a valid user', async () => {
     // Change to something else
-    users.updateProfile(1, { name: 'Bobby', email: 'bobby@example.com' })
-      .then((result) => {
-        expect(result).to.be.true;
-        users.findByUsername('bob')
-          .then((user) => {
-            expect(user).to.contain({
-              id       : 1,
-              username : 'bob',
-              name     : 'Bobby',
-              email    : 'bobby@example.com',
-            });
-          });
-      });
+    const result = await users.updateProfile(1, { name: 'Bobby', email: 'bobby@example.com' });
+    expect(result).to.be.true;
+    const user = await users.findByUsername('bob');
+    expect(user).to.contain({
+      id: 1,
+      username: 'bob',
+      name: 'Bobby',
+      email: 'bobby@example.com',
+    })
 
     // Change back
     users.updateProfile(1, { name: 'Bob Smith', email: 'a@ex.com' })
