@@ -37,7 +37,6 @@ exports.info = async (req, res) => {
     res.json({ audience : client.clientId, expires_in : expirationLeft });
   })
   .catch((err) => {
-    console.error('ERROR: ', err.status, ' -> ', err.message);
     res.status(err.status);
     res.json({ error: err.message });
   });
