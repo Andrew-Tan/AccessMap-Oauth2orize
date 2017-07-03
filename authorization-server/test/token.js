@@ -51,9 +51,9 @@ describe('token', () => {
         },
       }));
 
-    it('should work with a valid token', () => {
+    it('should work with a valid token', async () => {
       const createdToken = utils.createToken();
-      accessTokens.save(createdToken, new Date(0), '1', '1', '*');
+      await accessTokens.save(createdToken, new Date(0), '1', '1', '*');
       return token.info({
         query : { access_token : createdToken },
       }, {

@@ -44,7 +44,7 @@ describe('users', () => {
       username: 'bob',
       name: 'Bobby',
       email: 'bobby@example.com',
-    })
+    });
 
     // Change back
     users.updateProfile(1, { name: 'Bob Smith', email: 'a@ex.com' })

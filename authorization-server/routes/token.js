@@ -25,7 +25,7 @@ const validate = require('./validate');
  * @returns {Promise} Returns the promise for testing only
  */
 exports.info = (req, res) => {
-  validate.tokenForHttp(req.query.access_token)
+  return validate.tokenForHttp(req.query.access_token)
   .then(() => db.accessTokens.find(req.query.access_token))
   .then(token => validate.tokenExistsForHttp(token))
   .then(token =>
@@ -64,7 +64,7 @@ exports.info = (req, res) => {
  * @returns {Promise} Returns the promise for testing
  */
 exports.revoke = (req, res) => {
-  validate.tokenForHttp(req.query.token)
+  return validate.tokenForHttp(req.query.token)
   .then(() => db.accessTokens.delete(req.query.token))
   .then((token) => {
     if (token == null) {

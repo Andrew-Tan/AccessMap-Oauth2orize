@@ -30,20 +30,27 @@ models.sequelize.sync().then(async () => {
       name          : 'Samplr',
       clientId      : 'abc123',
       clientSecret  : 'ssh-secret',
-    }).catch(() => console.error('Unable to create Client: Samplr'));
+    }).catch(() => {
+      // TODO: Probably should be renabled after a verbose option is created
+      // console.error('Unable to create Client: Samplr')
+    });
     await models.clients.create({
       id            : 2,
       name          : 'Samplr2',
       clientId      : 'xyz123',
       clientSecret  : 'ssh-password',
-    }).catch(() => console.error('Unable to create Client: Samplr2'));
+    }).catch(() => {
+      // console.error('Unable to create Client: Samplr2')
+    });
     await models.clients.create({
       id            : 3,
       name          : 'Samplr3',
       clientId      : 'trustedClient',
       clientSecret  : 'ssh-otherpassword',
       trustedClient : true,
-    }).catch(() => console.error('Unable to create Client: Samplr3'));
+    }).catch(() => {
+      // console.error('Unable to create Client: Samplr3')
+    });
   }
 });
 
