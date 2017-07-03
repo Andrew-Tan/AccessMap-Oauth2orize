@@ -24,7 +24,7 @@ const validate = require('./validate');
  * @param   {Object}  res - The response
  * @returns {Promise} Returns the promise for testing only
  */
-exports.info = (req, res) => {
+exports.info = async (req, res) => {
   return validate.tokenForHttp(req.query.access_token)
   .then(() => db.accessTokens.find(req.query.access_token))
   .then(token => validate.tokenExistsForHttp(token))
@@ -37,6 +37,7 @@ exports.info = (req, res) => {
     res.json({ audience : client.clientId, expires_in : expirationLeft });
   })
   .catch((err) => {
+    console.error('ERROR: ', err.status, ' -> ', err.message);
     res.status(err.status);
     res.json({ error: err.message });
   });
