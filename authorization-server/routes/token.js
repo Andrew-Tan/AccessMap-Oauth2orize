@@ -28,10 +28,11 @@ exports.info = async (req, res) => {
   return validate.tokenForHttp(req.query.access_token)
   .then(() => db.accessTokens.find(req.query.access_token))
   .then(token => validate.tokenExistsForHttp(token))
-  .then(token =>
-    db.clients.find(token.clientID)
+  .then(token => {
+    return db.clients.find(token.clientID)
     .then(client => validate.clientExistsForHttp(client))
-    .then(client => ({ client, token })))
+    .then(client => ({ client, token }))
+  })
   .then(({ client, token }) => {
     const expirationLeft = Math.floor((token.expirationDate.getTime() - Date.now()) / 1000);
     res.json({
