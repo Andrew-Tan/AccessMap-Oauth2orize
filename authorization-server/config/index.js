@@ -13,7 +13,7 @@
  *
  * NOTE: this also correspond to the name of the presets in database configuration
  */
-exports.deployMode = 'test'
+exports.deployMode = 'test';
 
 /**
  * Configuration of access tokens.

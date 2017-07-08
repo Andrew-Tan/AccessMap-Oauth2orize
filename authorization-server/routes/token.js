@@ -34,7 +34,13 @@ exports.info = async (req, res) => {
     .then(client => ({ client, token })))
   .then(({ client, token }) => {
     const expirationLeft = Math.floor((token.expirationDate.getTime() - Date.now()) / 1000);
-    res.json({ audience : client.clientId, expires_in : expirationLeft });
+    res.json({
+      audience: client.clientId,
+      clientID: token.clientID,
+      userID: token.userID,
+      scope: token.scope,
+      expires_in : expirationLeft
+    });
   })
   .catch((err) => {
     res.status(err.status);
