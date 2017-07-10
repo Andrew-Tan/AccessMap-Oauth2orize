@@ -56,9 +56,9 @@ describe('token', () => {
       await accessTokens.save(createdToken, new Date(0), '1', '1', '*');
       return token.info({
         query : { access_token : createdToken },
-        // TODO: find out the reason why error happens.
-        status : (statusCode) => { console.error('TODO: Status code should not be called with valid token: ', statusCode); },
       }, {
+        // TODO: find out the reason why error happens.
+        status : (statusCode) => { console.error('Info: Status code should not be called with valid token: ', statusCode); },
         json : (message) => {
           expect(message.audience).eql('abc123');
           expect(message).to.have.property('expires_in');
@@ -139,11 +139,10 @@ describe('token', () => {
       return token.revoke({
         query : { token : createdToken },
       }, {
+        status : (statusCode) => { console.error('Revoke: Status code should not be called with valid token: ', statusCode); },
         json : (message) => {
           expect(message).eql({});
         },
-        // TODO: fix error being thrown in this test case
-        status : (statusCode) => { console.error('Status code should not be called here: ', statusCode); }
       });
     });
 
