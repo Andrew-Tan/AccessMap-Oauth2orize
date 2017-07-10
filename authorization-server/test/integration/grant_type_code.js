@@ -7,6 +7,7 @@ const properties = require('./common').properties;
 const request    = require('request').defaults({ jar: true, strictSSL: false }); // eslint-disable-line
 const sinonChai  = require('sinon-chai');
 const validate   = require('./common').validate;
+const sequelize  = require('../../db/models').sequelize;
 
 chai.use(sinonChai);
 const expect = chai.expect;
@@ -63,11 +64,17 @@ describe('Grant Type Authorization Code', () => {
       validate.authorizationCode(code);
       return code;
     })
-    .then(code =>
-      Promise.all([helper.postOAuthCode(code), helper.postOAuthCode(code)]))
-    .then(([[response1, body1], [response2, body2]]) => {
-      validate.accessRefreshToken(response1, body1);
-      validate.invalidCodeError(response2, body2);
+    .then((code) => {
+      Promise.all([helper.postOAuthCode(code), helper.postOAuthCode(code)])
+      helper.postOAuthCode(code).then(async (response1, body1) => {
+        validate.accessRefreshToken(response1, body1);
+        await sequelize.sync();
+
+        // Second request
+        helper.postOAuthCode(code).then((response2, body2) => {
+          validate.invalidCodeError(response2, body2);
+        });
+      });
     }));
 
   it('should work with the authorization_code not asking for a refresh token', () =>

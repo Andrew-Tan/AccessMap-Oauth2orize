@@ -5,6 +5,7 @@ require('process').env.OAUTHRECIPES_SURPRESS_TRACE = true;
 const chai                            = require('chai');
 const sinonChai                       = require('sinon-chai');
 const { accessTokens, refreshTokens } = require('../db');
+const sequelize                       = require('../db/models').sequelize;
 const utils                           = require('../routes/utils');
 const token                           = require('../routes/token');
 
@@ -54,6 +55,7 @@ describe('token', () => {
     it('should work with a valid token', async () => {
       const createdToken = utils.createToken();
       await accessTokens.save(createdToken, new Date(0), '1', '1', '*');
+      await sequelize.sync();
       return token.info({
         query : { access_token : createdToken },
       }, {
@@ -136,6 +138,7 @@ describe('token', () => {
     it('should work with a valid access token', async () => {
       const createdToken = utils.createToken();
       await accessTokens.save(createdToken, new Date(0), '1', '1', '*');
+      await sequelize.sync();
       return token.revoke({
         query : { token : createdToken },
       }, {

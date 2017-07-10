@@ -2,6 +2,7 @@
 
 const chai             = require('chai');
 const { accessTokens } = require('../../db');
+const sequelize        = require('../../db/models').sequelize;
 const jwt              = require('jsonwebtoken');
 const sinonChai        = require('sinon-chai');
 const utils            = require('../../routes/utils');
@@ -92,7 +93,8 @@ describe('accesstokens', () => {
       const token2   = utils.createToken();
       const tokenId1 = jwt.decode(token1).jti;
       const tokenId2 = jwt.decode(token2).jti;
-      return accessTokens.save(token1, new Date(0), 1, 1, '*')
+      accessTokens.save(token1, new Date(0), 1, 1, '*');
+      sequelize.sync()
       .then(() => accessTokens.save(token2, new Date(0), 2, 2, '*'))
       .then(() => accessTokens.removeExpired())
       // .then((expiredTokens) => {
