@@ -65,7 +65,6 @@ describe('Grant Type Authorization Code', () => {
       return code;
     })
     .then((code) => {
-      Promise.all([helper.postOAuthCode(code), helper.postOAuthCode(code)])
       helper.postOAuthCode(code).then(async (response1, body1) => {
         validate.accessRefreshToken(response1, body1);
         await sequelize.sync();

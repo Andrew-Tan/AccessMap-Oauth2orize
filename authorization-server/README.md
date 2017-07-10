@@ -5,6 +5,8 @@ This is the authorization server.
 
 # Configuration
 Before spinning up the authorization server, a few configuration MUST BE MADE to make it run correctly.
+Make a copy from config/example-index.js and rename it to index.js, then tweak configuration according
+to your preference.
 
 ### Certificate
 The certificate that this authorization server will use is placed in cert/. They are used for signing JWT
