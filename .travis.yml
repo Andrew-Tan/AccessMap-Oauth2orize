@@ -1,5 +1,6 @@
 before_install:
  - cd authorization-server
+ - cp config/example-index.js config/index.js
 language: node_js
 node_js:
   - "8"
