@@ -96,7 +96,7 @@ validate.tokenInfoJson = (response, body) => {
   expect(response.statusCode).to.eql(200);
   const jsonResponse = JSON.parse(body);
   expect(response.headers['content-type']).to.eql('application/json; charset=utf-8');
-  expect(Object.keys(jsonResponse)).to.have.lengthOf(2);
+  expect(Object.keys(jsonResponse)).to.have.lengthOf(5);
   expect(jsonResponse).to.have.property('audience', 'trustedClient');
   expect(jsonResponse.expires_in).to.be.above(3500);
 };
